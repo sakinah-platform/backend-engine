@@ -2,3 +2,4 @@ venv_django
 .env
 .idea
 **/__pycache__
+*.log

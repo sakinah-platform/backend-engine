@@ -28,12 +28,12 @@ LOCAL_LOGGING = {
         },
         "error_json_file": {
             "class": "logging.handlers.WatchedFileHandler",
-            "filename": ERROR_LOGGING_FILE,
+            "filename": ERROR_LOGGING_FILE[0],
             "formatter": "json_formatter",
         },
         "info_json_file": {
             "class": "logging.handlers.WatchedFileHandler",
-            "filename": INFO_LOGGING_FILE,
+            "filename": INFO_LOGGING_FILE[0],
             "formatter": "json_formatter",
         },
     },
