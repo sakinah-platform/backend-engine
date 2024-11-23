@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from os import environ, path
-from logging_configuration import LOCAL_LOGGING, PRODUCTION_LOGGING
+from backend.logging_configuration import LOCAL_LOGGING, PRODUCTION_LOGGING
 
 PRODUCTION = environ.get('PRODUCTION')
 DEBUG = not PRODUCTION
@@ -93,10 +93,10 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': environ.get('DISPO_NG_DB_NAME'),
-        'USER': environ.get('DISPO_NG_DB_USER'),
-        'PASSWORD': environ.get('DISPO_NG_DB_PASSWORD'),
-        'HOST': environ.get('DISPO_NG_DB_HOST'),
+        'NAME': environ.get('DB_NAME'),
+        'USER': environ.get('DB_USER'),
+        'PASSWORD': environ.get('DB_PASSWORD'),
+        'HOST': environ.get('DB_HOST'),
     }
 }
 
