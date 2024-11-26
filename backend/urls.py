@@ -20,6 +20,12 @@ from django.views.generic import RedirectView
 
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
+from django.conf import settings
+from django.conf.urls.static import static
+
+from master_data.api_router import MasterDataRouter
+
+master_data_router = MasterDataRouter().result()
 urlpatterns = [
     path('', RedirectView.as_view(pattern_name='swagger-ui', permanent=False), name='index'),
     path('admin/', admin.site.urls),
@@ -27,4 +33,10 @@ urlpatterns = [
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('rest/', include('rest_framework.urls'), name='rest_framework'),
+    path('master_data/', include(master_data_router), name='master_data'),
 ]
+
+if not settings.PRODUCTION:
+
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
