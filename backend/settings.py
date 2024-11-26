@@ -12,9 +12,11 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from os import environ, path
-from backend.logging_configuration import LOCAL_LOGGING, PRODUCTION_LOGGING
 
-PRODUCTION = environ.get('PRODUCTION')
+from backend.system_utility.settings_utility import DATE_FORMATS, DATETIME_FORMATS
+from backend.system_utility.logging_configuration import LOCAL_LOGGING, PRODUCTION_LOGGING
+
+PRODUCTION = environ.get('PRODUCTION').lower() == 'true'
 DEBUG = not PRODUCTION
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,9 +47,11 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_spectacular',
     'drf_standardized_errors',
+    'master_data'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -100,6 +104,22 @@ DATABASES = {
     }
 }
 
+# Cache
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.dummy.DummyCache",
+    }
+}
+
+if PRODUCTION:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.redis.RedisCache",
+            "LOCATION": [
+                "redis://127.0.0.1:6379",  # leader
+            ],
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -150,17 +170,66 @@ SPECTACULAR_SETTINGS = {
                 'url': 'https://www.linkedin.com/in/hafiyyan-sayyid-fadhlillah-47950345/',
                 'email': 'hafiyyan94@gmail.com'},
     'LICENSE': {'name': 'MIT License', 'url': 'https://opensource.org/license/mit/'},
-    'SERVE_PUBLIC': True
+    'SERVE_PUBLIC': True,
+    "ENUM_NAME_OVERRIDES": {
+        "ValidationErrorEnum": "drf_standardized_errors.openapi_serializers.ValidationErrorEnum.choices",
+        "ClientErrorEnum": "drf_standardized_errors.openapi_serializers.ClientErrorEnum.choices",
+        "ServerErrorEnum": "drf_standardized_errors.openapi_serializers.ServerErrorEnum.choices",
+        "ErrorCode401Enum": "drf_standardized_errors.openapi_serializers.ErrorCode401Enum.choices",
+        "ErrorCode403Enum": "drf_standardized_errors.openapi_serializers.ErrorCode403Enum.choices",
+        "ErrorCode404Enum": "drf_standardized_errors.openapi_serializers.ErrorCode404Enum.choices",
+        "ErrorCode405Enum": "drf_standardized_errors.openapi_serializers.ErrorCode405Enum.choices",
+        "ErrorCode406Enum": "drf_standardized_errors.openapi_serializers.ErrorCode406Enum.choices",
+        "ErrorCode415Enum": "drf_standardized_errors.openapi_serializers.ErrorCode415Enum.choices",
+        "ErrorCode429Enum": "drf_standardized_errors.openapi_serializers.ErrorCode429Enum.choices",
+        "ErrorCode500Enum": "drf_standardized_errors.openapi_serializers.ErrorCode500Enum.choices",
+    },
+    "POSTPROCESSING_HOOKS": ["drf_standardized_errors.openapi_hooks.postprocess_schema_enums"]
 }
+
+# CORS Related Setting
+CORS_ORIGIN_ALLOW_ALL = not PRODUCTION
+CORS_ALLOW_CREDENTIALS = True
+
+if PRODUCTION:
+    CORS_ORIGIN_WHITELIST = [
+        'https://sakinah.co.id',
+        'http://localhost:6000'
+    ]
+
+    CSRF_TRUSTED_ORIGINS = [
+        'https://sakinah.co.id',
+        'http://localhost:6000'
+    ]
 
 LOGGING = LOCAL_LOGGING if not PRODUCTION else PRODUCTION_LOGGING
 
 SERVEABLE_FOLDER = environ.get('SERVEABLE_FOLDER', '')
 SERVEABLE_FOLDER_PATH = BASE_DIR if len(SERVEABLE_FOLDER) == 0 else Path(SERVEABLE_FOLDER)
 
+STATIC_PATH = path.join('static')
+STATIC_ROOT = path.join(SERVEABLE_FOLDER_PATH, 'static')
+STATIC_URL = '/static/'
+
 MEDIA_PATH = path.join('media')
 MEDIA_ROOT = path.join(SERVEABLE_FOLDER_PATH, 'media')
 MEDIA_URL = '/media/'
+FILE_UPLOAD_TEMP_DIR = path.join(SERVEABLE_FOLDER_PATH, 'temp')
 
 LOGIN_URL = 'rest/login/'
 LOGOUT_URL = 'rest/logout/'
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+DATE_INPUT_FORMATS = DATE_FORMATS
+DATETIME_INPUT_FORMATS = DATETIME_FORMATS
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 100000000
+DATA_UPLOAD_MAX_MEMORY_SIZE = 100000000
+
+FIRST_DAY_OF_WEEK = 1
+
+DRF_STANDARDIZED_ERRORS = {
+    "ENABLE_IN_DEBUG_FOR_UNHANDLED_EXCEPTIONS": True,
+    "EXCEPTION_HANDLER_CLASS": "backend.system_utility.custom_exception_handler.ExceptionHandlerWithLogging"
+}
+
