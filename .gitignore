@@ -3,3 +3,4 @@ venv_django
 .idea
 **/__pycache__
 *.log
+media
