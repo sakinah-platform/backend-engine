@@ -2,6 +2,7 @@ from django.contrib import admin
 
 from master_data.models.vendor_category import VendorCategory
 from master_data.models.vendor_galleries import VendorGallery
+from master_data.models.vendor_packages import VendorPackage
 from master_data.models.vendor import Vendor
 
 
@@ -47,4 +48,18 @@ class VendorGalleryAdmin(admin.ModelAdmin):
                     'created_at',
                     'updated_at')
     search_fields = ['id',
+                     'vendor']
+
+
+@admin.register(VendorPackage)
+class VendorPackageAdmin(admin.ModelAdmin):
+
+    list_display = ('id',
+                    'name',
+                    'description',
+                    'vendor',
+                    'created_at',
+                    'updated_at')
+    search_fields = ['id',
+                     'name',
                      'vendor']

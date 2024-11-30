@@ -1,8 +1,10 @@
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.db.utils import IntegrityError
 from django.test import TestCase
 
 from master_data.models.vendor_category import VendorCategory
 from master_data.models.vendor_galleries import VendorGallery
+from master_data.models.vendor_packages import VendorPackage
 from master_data.models.vendor import Vendor
 
 
@@ -73,3 +75,37 @@ class TestVendorGallery(TestCase):
 
         expected_images_count = 1
         self.assertEqual(vendor_galleries_count, expected_images_count)
+
+
+class TestVendorPackage(TestCase):
+
+    def setUp(self):
+        uploaded = dummy_image_file()
+        cat = VendorCategory.objects.create(name='test_cat',
+                                            description='test_desc',
+                                            icon=uploaded)
+        vendor = Vendor.objects.create(name='test_vendor',
+                                       description='test_desc',
+                                       about='test_about',
+                                       category=cat,
+                                       profile_image=uploaded)
+        VendorPackage.objects.create(name='test_package',
+                                     price=1,
+                                     vendor=vendor)
+        VendorPackage.objects.create(name='test_package_del',
+                                     price=0,
+                                     vendor=vendor,
+                                     deleted_flag=True)
+
+    def test_vendor_package_price_gte_zero(self):
+        vendor = Vendor.objects.get(name='test_vendor')
+        with self.assertRaises(IntegrityError):
+            VendorPackage.objects.create(name='test_package_1',
+                                         price=-1,
+                                         vendor=vendor)
+
+    def test_get_vendor_package_return_not_soft_deleted_package(self):
+        vendor_package_count = VendorPackage.objects.count()
+
+        expected_package_count = 1
+        self.assertEqual(vendor_package_count, expected_package_count)
