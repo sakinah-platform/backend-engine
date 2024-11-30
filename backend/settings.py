@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_spectacular',
     'drf_standardized_errors',
-    'master_data'
+    'master_data',
 ]
 
 MIDDLEWARE = [
