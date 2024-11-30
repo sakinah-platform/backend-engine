@@ -3,10 +3,12 @@ from django.db import models
 from master_data.utility.media_utility import vendor_profile_images
 from master_data.models.vendor_category import VendorCategory
 
+
 class BaseModelManager(models.Manager):
 
     def get_queryset(self):
         return super().get_queryset().filter(deleted_flag=False)
+
 
 class Vendor(models.Model):
 
@@ -39,7 +41,7 @@ class Vendor(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     objects = BaseModelManager()
-    
+
     class Meta:
 
         db_table = "master_vendors"

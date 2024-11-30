@@ -12,6 +12,7 @@ class VendorCategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'description', 'icon', 'created_at', 'updated_at')
     search_fields = ['id', 'name', 'description']
 
+
 @admin.register(Vendor)
 class VendorAdmin(admin.ModelAdmin):
 
@@ -35,6 +36,7 @@ class VendorAdmin(admin.ModelAdmin):
                      'category',
                      'availability',
                      'visibility']
+
 
 @admin.register(VendorGallery)
 class VendorGalleryAdmin(admin.ModelAdmin):

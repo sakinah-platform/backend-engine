@@ -19,6 +19,6 @@ class VendorCategory(models.Model):
 
         db_table = "master_vendor_category"
         get_latest_by = ["-created_at"]
-      
+
     def __str__(self):
         return self.name

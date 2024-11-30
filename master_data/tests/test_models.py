@@ -38,7 +38,7 @@ class TestVendor(TestCase):
 
     def test_get_vendor_return_not_soft_deleted_vendor(self):
         vendor = Vendor.objects.get(name='test_vendor')
-        
+
         self.assertEqual(vendor.name, 'test_vendor')
         with self.assertRaises(Vendor.DoesNotExist):
             Vendor.objects.get(name='test_vendor_del')
@@ -52,10 +52,10 @@ class TestVendorGallery(TestCase):
                                             description='test_desc',
                                             icon=uploaded)
         vendor = Vendor.objects.create(name='test_vendor',
-                              description='test_desc',
-                              about='test_about',
-                              category=cat,
-                              profile_image=uploaded)
+                                       description='test_desc',
+                                       about='test_about',
+                                       category=cat,
+                                       profile_image=uploaded)
         VendorGallery.objects.create(image=uploaded,
                                      vendor=vendor)
         VendorGallery.objects.create(image=uploaded,

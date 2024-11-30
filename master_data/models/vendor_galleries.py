@@ -25,11 +25,11 @@ class VendorGallery(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     objects = BaseModelManager()
-    
+
     class Meta:
 
         db_table = "master_vendor_gallery"
         get_latest_by = ["-created_at"]
-      
+
     def __str__(self):
         return os.path.split(self.image.url)[1]
