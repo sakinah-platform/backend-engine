@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from master_data.models.vendor_category import VendorCategory
+from master_data.models.vendor_galleries import VendorGallery
 from master_data.models.vendor import Vendor
 
 
@@ -34,3 +35,14 @@ class VendorAdmin(admin.ModelAdmin):
                      'category',
                      'availability',
                      'visibility']
+
+@admin.register(VendorGallery)
+class VendorGalleryAdmin(admin.ModelAdmin):
+
+    list_display = ('id',
+                    'image',
+                    'vendor',
+                    'created_at',
+                    'updated_at')
+    search_fields = ['id',
+                     'vendor']

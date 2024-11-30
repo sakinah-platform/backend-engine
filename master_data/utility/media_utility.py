@@ -1,5 +1,7 @@
 from os import path
 
+import shortuuid
+
 def rel_path(media_path, assigned_filename, ext):
     relpath = '{media_path}/{filename}'
     new_path = relpath.format(media_path=media_path, 
@@ -18,3 +20,9 @@ def vendor_profile_images(instance, curr_file):
     assigned_filename: str = instance.name.replace(' ','')
 
     return rel_path('vendor_profile_images', assigned_filename, ext)
+
+def vendor_galleries(_, curr_file):
+    filename, ext = path.splitext(curr_file)
+
+    assigned_filename: str = filename + '_' + shortuuid.uuid()
+    return rel_path('vendor_galleries', assigned_filename, ext)
