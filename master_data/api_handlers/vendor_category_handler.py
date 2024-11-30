@@ -6,8 +6,8 @@ from rest_framework.viewsets import GenericViewSet
 from backend.system_utility.custom_search_utility import CustomSearchFilter
 from backend.system_utility.pagination_utility import FiftyResultsPagination
 from backend.system_utility.settings_utility import string_for_datetime, DEFAULT_CACHE_TIME
-from master_data.business_logic.logic_vendor_category import get_vendor_categories
-from master_data.models import VendorCategory
+from master_data.models.vendor_category import VendorCategory
+
 
 class VendorCategoryListSerializer(serializers.ModelSerializer):
 
@@ -18,6 +18,7 @@ class VendorCategoryListSerializer(serializers.ModelSerializer):
         model = VendorCategory
         fields = ('id', 'name', 'icon')
 
+
 class VendorCategoryReadSerializer(VendorCategoryListSerializer):
 
     description = serializers.CharField(read_only=True)
@@ -25,12 +26,13 @@ class VendorCategoryReadSerializer(VendorCategoryListSerializer):
 
     class Meta:
         model = VendorCategory
-        fields = ('id', 'name', 'description', 'icon')
+        fields = ('id', 'name', 'description', 'icon', 'created_at')
+
 
 @method_decorator(cache_page(DEFAULT_CACHE_TIME), name='list')
 class VendorCategoryViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
 
-    queryset = get_vendor_categories()
+    queryset = VendorCategory.objects.all()
     pagination_class = FiftyResultsPagination
     filter_backends = [filters.OrderingFilter, CustomSearchFilter]
     ordering_fields = ('id', 'name', 'created_at')
@@ -44,5 +46,3 @@ class VendorCategoryViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Ge
             return VendorCategoryListSerializer
 
         return VendorCategoryReadSerializer
-
-
