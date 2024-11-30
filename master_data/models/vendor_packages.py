@@ -1,12 +1,7 @@
 from django.db import models
 
 from master_data.models.vendor import Vendor
-
-
-class BaseModelManager(models.Manager):
-
-    def get_queryset(self):
-        return super().get_queryset().filter(deleted_flag=False)
+from master_data.models.base import BaseModelManager
 
 
 class VendorPackage(models.Model):
