@@ -161,3 +161,12 @@ class TestVendorSchedule(TestCase):
 
         expected_schedule_count = 1
         self.assertEqual(vendor_schedule_count, expected_schedule_count)
+
+    def test_vendor_schedule_duplication_not_allowed_validation(self):
+        vendor = Vendor.objects.get(name='test_vendor')
+        duplicate_schedule = VendorSchedule.objects.create(vendor=vendor,
+                                                           start_time=datetime.time(6, 0),
+                                                           end_time=datetime.time(8, 0),
+                                                           day=Day.SUNDAY)
+
+        self.assertRaises(ValidationError, duplicate_schedule.full_clean)
