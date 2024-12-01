@@ -1,7 +1,5 @@
 from os import path
 
-import shortuuid
-
 
 ALLOWED_IMAGE_EXTENSIONS = ['jpg', 'jpeg', 'png']
 
@@ -31,5 +29,4 @@ def vendor_profile_images(instance, curr_file):
 def vendor_galleries(_, curr_file):
     filename, ext = path.splitext(curr_file)
 
-    assigned_filename: str = filename + '_' + shortuuid.uuid()
-    return rel_path('vendor_galleries', assigned_filename, ext)
+    return rel_path('vendor_galleries', filename, ext)

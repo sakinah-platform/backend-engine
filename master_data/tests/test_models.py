@@ -130,12 +130,6 @@ class TestVendorGallery(TestCase):
                                      vendor=vendor,
                                      deleted_flag=True)
 
-    def test_vendor_gallery_filepath_appended_shortuuid(self):
-        vendor = Vendor.objects.get(name='test_vendor')
-        vendor_gallery = VendorGallery.objects.get(vendor=vendor)
-        expected_filepath_rgx = r'^\/media\/vendor_galleries\/small_[0-9A-Za-z]{22}.jpg'
-        self.assertRegex(vendor_gallery.image.url, expected_filepath_rgx)
-
     def test_get_vendor_gallery_return_not_soft_deleted_image(self):
         vendor_galleries_count = VendorGallery.objects.count()
 
