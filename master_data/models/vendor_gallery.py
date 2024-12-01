@@ -15,6 +15,7 @@ class VendorGallery(models.Model):
                               null=False,
                               blank=False)
     vendor = models.ForeignKey(Vendor,
+                               related_name='galleries',
                                on_delete=models.PROTECT,
                                blank=False)
     deleted_flag = models.BooleanField(default=False)

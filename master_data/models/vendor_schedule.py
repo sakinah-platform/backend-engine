@@ -26,6 +26,7 @@ class VendorSchedule(models.Model):
                            blank=False,
                            null=False)
     vendor = models.ForeignKey(Vendor,
+                               related_name='schedules',
                                on_delete=models.PROTECT,
                                blank=False)
     deleted_flag = models.BooleanField(default=False)

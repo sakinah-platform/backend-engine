@@ -11,6 +11,7 @@ class VendorPackage(models.Model):
                             blank=False,
                             null=False)
     vendor = models.ForeignKey(Vendor,
+                               related_name='packages',
                                on_delete=models.PROTECT,
                                blank=False)
     price = models.PositiveIntegerField(blank=False, null=False)
