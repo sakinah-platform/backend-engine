@@ -1,9 +1,12 @@
 from django.db import models
-from django.core.validators import FileExtensionValidator
+from django.core.validators import FileExtensionValidator, RegexValidator
 
 from master_data.utility.media_utility import vendor_profile_images, ALLOWED_IMAGE_EXTENSIONS
 from master_data.models.base import BaseModelManager
 from master_data.models.vendor_category import VendorCategory
+
+alphanumeric_validator = RegexValidator(r'^[0-9a-zA-Z-_@.,]*$',
+                                        'Only alphanumeric characters, dot (.), comma (,), at symbol (@) and minus (-) are allowed.')
 
 
 class Vendor(models.Model):
@@ -23,10 +26,10 @@ class Vendor(models.Model):
                                  blank=False,
                                  null=False)
     email = models.EmailField(blank=False, null=False)
-    facebook = models.CharField(max_length=100, blank=True)
-    instagram = models.CharField(max_length=100, blank=True)
-    tiktok = models.CharField(max_length=100, blank=True)
-    youtube = models.CharField(max_length=100, blank=True)
+    facebook = models.CharField(max_length=100, blank=True, validators=[alphanumeric_validator])
+    instagram = models.CharField(max_length=100, blank=True, validators=[alphanumeric_validator])
+    tiktok = models.CharField(max_length=100, blank=True, validators=[alphanumeric_validator])
+    youtube = models.CharField(max_length=100, blank=True, validators=[alphanumeric_validator])
     width_field = models.IntegerField(default=200)
     height_field = models.IntegerField(default=200)
     profile_image = models.ImageField(upload_to=vendor_profile_images,

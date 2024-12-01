@@ -33,11 +33,13 @@ class TestVendor(TestCase):
         Vendor.objects.create(name='test_vendor',
                               description='test_desc',
                               about='test_about',
+                              email='test@test.com',
                               category=cat,
                               profile_image=uploaded)
         Vendor.objects.create(name='test_vendor_del',
                               description='test_desc',
                               about='test_about',
+                              email='test@test.com',
                               category=cat,
                               deleted_flag=True,
                               profile_image=uploaded)
@@ -56,9 +58,57 @@ class TestVendor(TestCase):
         vendor = Vendor.objects.create(name='test_vendor_gif',
                                        description='test_desc',
                                        about='test_about',
+                                       email='test@test.com',
                                        category=cat,
                                        profile_image=uploaded_gif)
-        self.assertRaises(ValidationError, vendor.full_clean)
+        expected_error_message = 'File extension “gif” is not allowed. Allowed extensions are: jpg, jpeg, png.'
+        with self.assertRaisesMessage(ValidationError, expected_error_message):
+            vendor.full_clean()
+
+    def test_vendor_alphanumeric_validation(self):
+        cat = VendorCategory.objects.get(name='test_cat')
+        uploaded = dummy_image_file('small.jpg', 'image/jpeg')
+        username_violation = '#invalid-user&'
+
+        vendor_fb = Vendor.objects.create(name='test_vendor_fb',
+                                          description='test_desc',
+                                          about='test_about',
+                                          email='test@test.com',
+                                          facebook=username_violation,
+                                          category=cat,
+                                          profile_image=uploaded)
+        vendor_ig = Vendor.objects.create(name='test_vendor_ig',
+                                          description='test_desc',
+                                          about='test_about',
+                                          email='test@test.com',
+                                          instagram=username_violation,
+                                          category=cat,
+                                          profile_image=uploaded)
+        vendor_tt = Vendor.objects.create(name='test_vendor_tt',
+                                          description='test_desc',
+                                          about='test_about',
+                                          email='test@test.com',
+                                          tiktok=username_violation,
+                                          category=cat,
+                                          profile_image=uploaded)
+        vendor_yt = Vendor.objects.create(name='test_vendor_yt',
+                                          description='test_desc',
+                                          about='test_about',
+                                          email='test@test.com',
+                                          youtube=username_violation,
+                                          category=cat,
+                                          profile_image=uploaded)
+
+        expected_error_message = 'Only alphanumeric characters, dot (.), comma (,), at symbol (@) and minus (-) are allowed.'
+
+        with self.assertRaisesMessage(ValidationError, expected_error_message):
+            vendor_fb.full_clean()
+        with self.assertRaisesMessage(ValidationError, expected_error_message):
+            vendor_ig.full_clean()
+        with self.assertRaisesMessage(ValidationError, expected_error_message):
+            vendor_tt.full_clean()
+        with self.assertRaisesMessage(ValidationError, expected_error_message):
+            vendor_yt.full_clean()
 
 
 class TestVendorGallery(TestCase):
@@ -71,6 +121,7 @@ class TestVendorGallery(TestCase):
         vendor = Vendor.objects.create(name='test_vendor',
                                        description='test_desc',
                                        about='test_about',
+                                       email='test@test.com',
                                        category=cat,
                                        profile_image=uploaded)
         VendorGallery.objects.create(image=uploaded,
@@ -97,7 +148,9 @@ class TestVendorGallery(TestCase):
 
         vendor_gallery = VendorGallery.objects.create(image=uploaded_gif,
                                                       vendor=vendor)
-        self.assertRaises(ValidationError, vendor_gallery.full_clean)
+        expected_error_message = 'File extension “gif” is not allowed. Allowed extensions are: jpg, jpeg, png.'
+        with self.assertRaisesMessage(ValidationError, expected_error_message):
+            vendor_gallery.full_clean()
 
 
 class TestVendorPackage(TestCase):
@@ -110,6 +163,7 @@ class TestVendorPackage(TestCase):
         vendor = Vendor.objects.create(name='test_vendor',
                                        description='test_desc',
                                        about='test_about',
+                                       email='test@test.com',
                                        category=cat,
                                        profile_image=uploaded)
         VendorPackage.objects.create(name='test_package',
@@ -144,6 +198,7 @@ class TestVendorSchedule(TestCase):
         vendor = Vendor.objects.create(name='test_vendor',
                                        description='test_desc',
                                        about='test_about',
+                                       email='test@test.com',
                                        category=cat,
                                        profile_image=uploaded)
         VendorSchedule.objects.create(vendor=vendor,
@@ -168,5 +223,6 @@ class TestVendorSchedule(TestCase):
                                                            start_time=datetime.time(6, 0),
                                                            end_time=datetime.time(8, 0),
                                                            day=Day.SUNDAY)
-
-        self.assertRaises(ValidationError, duplicate_schedule.full_clean)
+        expected_error_message = 'Schedule for test_vendor already exists'
+        with self.assertRaisesMessage(ValidationError, expected_error_message):
+            duplicate_schedule.full_clean()
