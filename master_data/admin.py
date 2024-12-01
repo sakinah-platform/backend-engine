@@ -3,6 +3,7 @@ from django.contrib import admin
 from master_data.models.vendor_category import VendorCategory
 from master_data.models.vendor_gallery import VendorGallery
 from master_data.models.vendor_package import VendorPackage
+from master_data.models.vendor_schedule import VendorSchedule
 from master_data.models.vendor import Vendor
 
 
@@ -63,3 +64,16 @@ class VendorPackageAdmin(admin.ModelAdmin):
     search_fields = ['id',
                      'name',
                      'vendor']
+
+
+@admin.register(VendorSchedule)
+class VendorScheduleAdmin(admin.ModelAdmin):
+
+    list_display = ('vendor',
+                    'day',
+                    'start_time',
+                    'end_time',
+                    'created_at',
+                    'updated_at')
+    search_fields = ['vendor',
+                     'day']

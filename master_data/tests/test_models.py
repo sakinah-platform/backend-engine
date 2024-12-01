@@ -5,7 +5,10 @@ from django.test import TestCase
 from master_data.models.vendor_category import VendorCategory
 from master_data.models.vendor_gallery import VendorGallery
 from master_data.models.vendor_package import VendorPackage
+from master_data.models.vendor_schedule import VendorSchedule, Day
 from master_data.models.vendor import Vendor
+
+import datetime
 
 
 def dummy_image_file():
@@ -109,3 +112,32 @@ class TestVendorPackage(TestCase):
 
         expected_package_count = 1
         self.assertEqual(vendor_package_count, expected_package_count)
+
+
+class TestVendorSchedule(TestCase):
+
+    def setUp(self):
+        uploaded = dummy_image_file()
+        cat = VendorCategory.objects.create(name='test_cat',
+                                            description='test_desc',
+                                            icon=uploaded)
+        vendor = Vendor.objects.create(name='test_vendor',
+                                       description='test_desc',
+                                       about='test_about',
+                                       category=cat,
+                                       profile_image=uploaded)
+        VendorSchedule.objects.create(vendor=vendor,
+                                      start_time=datetime.time(6, 0),
+                                      end_time=datetime.time(8, 0),
+                                      day=Day.SUNDAY)
+        VendorSchedule.objects.create(vendor=vendor,
+                                      start_time=datetime.time(8, 0),
+                                      end_time=datetime.time(10, 0),
+                                      day=Day.SUNDAY,
+                                      deleted_flag=True)
+
+    def test_get_vendor_schedule_return_not_soft_deleted_package(self):
+        vendor_schedule_count = VendorSchedule.objects.count()
+
+        expected_schedule_count = 1
+        self.assertEqual(vendor_schedule_count, expected_schedule_count)
