@@ -3,8 +3,8 @@ from django.db.utils import IntegrityError
 from django.test import TestCase
 
 from master_data.models.vendor_category import VendorCategory
-from master_data.models.vendor_galleries import VendorGallery
-from master_data.models.vendor_packages import VendorPackage
+from master_data.models.vendor_gallery import VendorGallery
+from master_data.models.vendor_package import VendorPackage
 from master_data.models.vendor import Vendor
 
 
