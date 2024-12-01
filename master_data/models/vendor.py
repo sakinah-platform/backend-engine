@@ -39,7 +39,7 @@ class Vendor(models.Model):
 
     class Meta:
 
-        db_table = "master_vendors"
+        db_table = "master_vendor"
         get_latest_by = ["-created_at"]
 
     def __str__(self):

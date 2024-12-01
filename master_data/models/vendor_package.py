@@ -12,7 +12,7 @@ class VendorPackage(models.Model):
                             null=False)
     vendor = models.ForeignKey(Vendor,
                                on_delete=models.PROTECT,
-                               blank=True)
+                               blank=False)
     price = models.PositiveIntegerField(blank=False, null=False)
     description = models.TextField(blank=False, null=False)
 
@@ -24,7 +24,7 @@ class VendorPackage(models.Model):
 
     class Meta:
 
-        db_table = "master_vendor_packages"
+        db_table = "master_vendor_package"
         get_latest_by = ["-created_at"]
 
     def __str__(self):

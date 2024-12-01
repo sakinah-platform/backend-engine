@@ -21,10 +21,10 @@ class Migration(migrations.Migration):
                 ('deleted_flag', models.BooleanField(default=False)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('vendor', models.ForeignKey(blank=True, on_delete=django.db.models.deletion.PROTECT, to='master_data.vendor')),
+                ('vendor', models.ForeignKey(blank=False, on_delete=django.db.models.deletion.PROTECT, to='master_data.vendor')),
             ],
             options={
-                'db_table': 'master_vendor_packages',
+                'db_table': 'master_vendor_package',
                 'get_latest_by': ['-created_at'],
             },
         ),

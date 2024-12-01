@@ -14,7 +14,7 @@ class VendorGallery(models.Model):
                               blank=False)
     vendor = models.ForeignKey(Vendor,
                                on_delete=models.PROTECT,
-                               blank=True)
+                               blank=False)
     deleted_flag = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
