@@ -1,6 +1,7 @@
 from django.db import models
+from django.core.validators import FileExtensionValidator
 
-from master_data.utility.media_utility import vendor_galleries
+from master_data.utility.media_utility import vendor_galleries, ALLOWED_IMAGE_EXTENSIONS
 from master_data.models.base import BaseModelManager
 from master_data.models.vendor import Vendor
 
@@ -10,6 +11,7 @@ import os
 class VendorGallery(models.Model):
 
     image = models.ImageField(upload_to=vendor_galleries,
+                              validators=[FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)],
                               null=False,
                               blank=False)
     vendor = models.ForeignKey(Vendor,

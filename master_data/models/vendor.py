@@ -1,6 +1,7 @@
 from django.db import models
+from django.core.validators import FileExtensionValidator
 
-from master_data.utility.media_utility import vendor_profile_images
+from master_data.utility.media_utility import vendor_profile_images, ALLOWED_IMAGE_EXTENSIONS
 from master_data.models.base import BaseModelManager
 from master_data.models.vendor_category import VendorCategory
 
@@ -26,7 +27,12 @@ class Vendor(models.Model):
     instagram = models.CharField(max_length=100, blank=True)
     tiktok = models.CharField(max_length=100, blank=True)
     youtube = models.CharField(max_length=100, blank=True)
+    width_field = models.IntegerField(default=200)
+    height_field = models.IntegerField(default=200)
     profile_image = models.ImageField(upload_to=vendor_profile_images,
+                                      width_field='width_field',
+                                      height_field='height_field',
+                                      validators=[FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)],
                                       blank=True)
     availability = models.BooleanField(default=True)
     visibility = models.CharField(choices=Visibility,

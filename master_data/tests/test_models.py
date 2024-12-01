@@ -1,4 +1,5 @@
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.exceptions import ValidationError
 from django.db.utils import IntegrityError
 from django.test import TestCase
 
@@ -11,21 +12,21 @@ from master_data.models.vendor import Vendor
 import datetime
 
 
-def dummy_image_file():
+def dummy_image_file(file_name, content_type):
     small_image = (
         b'\x47\x49\x46\x38\x39\x61\x01\x00\x01\x00\x00\x00\x00\x21\xf9\x04'
         b'\x01\x0a\x00\x01\x00\x2c\x00\x00\x00\x00\x01\x00\x01\x00\x00\x02'
         b'\x02\x4c\x01\x00\x3b'
     )
-    return SimpleUploadedFile('small.jpg',
+    return SimpleUploadedFile(file_name,
                               small_image,
-                              content_type='image/jpeg')
+                              content_type=content_type)
 
 
 class TestVendor(TestCase):
 
     def setUp(self):
-        uploaded = dummy_image_file()
+        uploaded = dummy_image_file('small.jpg', 'image/jpeg')
         cat = VendorCategory.objects.create(name='test_cat',
                                             description='test_desc',
                                             icon=uploaded)
@@ -48,11 +49,22 @@ class TestVendor(TestCase):
         with self.assertRaises(Vendor.DoesNotExist):
             Vendor.objects.get(name='test_vendor_del')
 
+    def test_vendor_profile_image_extension_validation(self):
+        cat = VendorCategory.objects.get(name='test_cat')
+        uploaded_gif = dummy_image_file('small.gif', 'image/gif')
+
+        vendor = Vendor.objects.create(name='test_vendor_gif',
+                                       description='test_desc',
+                                       about='test_about',
+                                       category=cat,
+                                       profile_image=uploaded_gif)
+        self.assertRaises(ValidationError, vendor.full_clean)
+
 
 class TestVendorGallery(TestCase):
 
     def setUp(self):
-        uploaded = dummy_image_file()
+        uploaded = dummy_image_file('small.jpg', 'image/jpeg')
         cat = VendorCategory.objects.create(name='test_cat',
                                             description='test_desc',
                                             icon=uploaded)
@@ -79,11 +91,19 @@ class TestVendorGallery(TestCase):
         expected_images_count = 1
         self.assertEqual(vendor_galleries_count, expected_images_count)
 
+    def test_vendor_gallery_extension_validation(self):
+        vendor = Vendor.objects.get(name='test_vendor')
+        uploaded_gif = dummy_image_file('small.gif', 'image/gif')
+
+        vendor_gallery = VendorGallery.objects.create(image=uploaded_gif,
+                                                      vendor=vendor)
+        self.assertRaises(ValidationError, vendor_gallery.full_clean)
+
 
 class TestVendorPackage(TestCase):
 
     def setUp(self):
-        uploaded = dummy_image_file()
+        uploaded = dummy_image_file('small.jpg', 'image/jpeg')
         cat = VendorCategory.objects.create(name='test_cat',
                                             description='test_desc',
                                             icon=uploaded)
@@ -117,7 +137,7 @@ class TestVendorPackage(TestCase):
 class TestVendorSchedule(TestCase):
 
     def setUp(self):
-        uploaded = dummy_image_file()
+        uploaded = dummy_image_file('small.jpg', 'image/jpeg')
         cat = VendorCategory.objects.create(name='test_cat',
                                             description='test_desc',
                                             icon=uploaded)
