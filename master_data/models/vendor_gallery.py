@@ -31,7 +31,7 @@ class VendorGallery(models.Model):
 
     class Meta:
 
-        db_table = "master_vendor_gallery"
+        db_table = "vendor_gallery"
         get_latest_by = ["-created_at"]
 
     def __str__(self):

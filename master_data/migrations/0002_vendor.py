@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
                 ('category', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='master_data.vendorcategory')),
             ],
             options={
-                'db_table': 'master_vendor',
+                'db_table': 'vendor',
                 'get_latest_by': ['-created_at'],
             },
         ),

@@ -38,7 +38,7 @@ class VendorSchedule(models.Model):
 
     class Meta:
 
-        db_table = "master_vendor_schedule"
+        db_table = "vendor_schedule"
         get_latest_by = ["-created_at"]
 
     def __str__(self):

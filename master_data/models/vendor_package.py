@@ -25,7 +25,7 @@ class VendorPackage(models.Model):
 
     class Meta:
 
-        db_table = "master_vendor_package"
+        db_table = "vendor_package"
         get_latest_by = ["-created_at"]
 
     def __str__(self):

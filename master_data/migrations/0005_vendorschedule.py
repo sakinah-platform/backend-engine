@@ -25,7 +25,7 @@ class Migration(migrations.Migration):
                 ('vendor', models.ForeignKey(blank=False, on_delete=django.db.models.deletion.PROTECT, to='master_data.vendor')),
             ],
             options={
-                'db_table': 'master_vendor_schedule',
+                'db_table': 'vendor_schedule',
                 'get_latest_by': ['-created_at'],
             },
         ),
