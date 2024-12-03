@@ -6,7 +6,33 @@ SYSTEM_UNKNOWN_ERR_MESSAGE = 'Some errors happen in the server. Please contact t
 SYSTEM_UNKNOWN_ERR_STRCODE = 'unknown_error'
 
 
-SYSTEM_CONSTANT: Dict = { SERVICE_UNAVAILABLE_STRCODE: SERVICE_UNAVAILABLE_MESSAGE,
-                          SYSTEM_UNKNOWN_ERR_STRCODE: SYSTEM_UNKNOWN_ERR_MESSAGE
+SYSTEM_CONSTANT: Dict = {SERVICE_UNAVAILABLE_STRCODE: SERVICE_UNAVAILABLE_MESSAGE,
+                         SYSTEM_UNKNOWN_ERR_STRCODE: SYSTEM_UNKNOWN_ERR_MESSAGE
 
+                         }
+
+MONDAY = 'monday'
+TUESDAY = 'tuesday'
+WEDNESDAY = 'wednesday'
+THURSDAY = 'thursday'
+FRIDAY = 'friday'
+SATURDAY = 'saturday'
+SUNDAY = 'sunday'
+
+SENIN = 'senin'
+SELASA = 'selasa'
+RABU = 'rabu'
+KAMIS = 'kamis'
+JUMAT = 'jumat'
+SABTU = 'sabtu'
+MINGGU = 'minggu'
+
+DAYS: Dict = {
+    MONDAY: SENIN,
+    TUESDAY: SELASA,
+    WEDNESDAY: RABU,
+    THURSDAY: KAMIS,
+    FRIDAY: JUMAT,
+    SATURDAY: SABTU,
+    SUNDAY: MINGGU,
 }

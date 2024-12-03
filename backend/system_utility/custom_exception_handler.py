@@ -9,6 +9,7 @@ from backend.system_utility.system_constant import SYSTEM_CONSTANT, SERVICE_UNAV
 
 logger = logging.getLogger('CustomExceptionHandler')
 
+
 class ServiceUnavailableException(APIException):
 
     status_code = 503

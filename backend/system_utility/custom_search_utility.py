@@ -20,6 +20,7 @@ class CustomSearchFilter(SearchFilter):
 
         return params.split()
 
+
 def is_quoted_string(value: str) -> bool:
 
     if len(value) > 0:
