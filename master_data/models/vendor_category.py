@@ -1,9 +1,18 @@
 from django.db import models
+from os import path
 
-from master_data.utility.media_utility import vendor_category_icon_paths
+from master_data.utility.media_utility import rel_path
 
+
+def vendor_category_icon_paths(instance, curr_file):
+    _, ext = path.splitext(curr_file)
+    assigned_filename: str = instance.name.replace(' ', '')
+
+    return rel_path('vendor_category_icons', assigned_filename, ext)
 
 # Create your models here.
+
+
 class VendorCategory(models.Model):
 
     name = models.CharField(max_length=100, unique=True, blank=False, null=False)

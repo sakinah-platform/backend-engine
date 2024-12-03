@@ -1,12 +1,20 @@
 from django.db import models
 from django.core.validators import FileExtensionValidator, RegexValidator
+from os import path
 
-from master_data.utility.media_utility import vendor_profile_images, ALLOWED_IMAGE_EXTENSIONS
+from master_data.utility.media_utility import rel_path, ALLOWED_IMAGE_EXTENSIONS
 from master_data.models.base import BaseModelManager
 from master_data.models.vendor_category import VendorCategory
 
 alphanumeric_validator = RegexValidator(r'^[0-9a-zA-Z-_@.,]*$',
                                         'Only alphanumeric characters, dot (.), comma (,), at symbol (@) and minus (-) are allowed.')
+
+
+def vendor_profile_images(instance, curr_file):
+    _, ext = path.splitext(curr_file)
+    assigned_filename: str = instance.name.replace(' ', '')
+
+    return rel_path('vendor_profile_images', assigned_filename, ext)
 
 
 class Vendor(models.Model):
