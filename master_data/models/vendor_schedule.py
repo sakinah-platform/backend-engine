@@ -1,19 +1,20 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 
+from backend.system_utility.system_constant import DAYS, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
 from master_data.models.vendor import Vendor
 from master_data.models.base import BaseModelManager
 
 
 class Day(models.TextChoices):
 
-    MONDAY = 'Monday'
-    TUESDAY = 'Tuesday'
-    WEDNESDAY = 'Wednesday'
-    THURSDAY = 'Thursday'
-    FRIDAY = 'Friday'
-    SATURDAY = 'Saturday'
-    SUNDAY = 'Sunday'
+    MONDAY = DAYS.get(MONDAY)
+    TUESDAY = DAYS.get(TUESDAY)
+    WEDNESDAY = DAYS.get(WEDNESDAY)
+    THURSDAY = DAYS.get(THURSDAY)
+    FRIDAY = DAYS.get(FRIDAY)
+    SATURDAY = DAYS.get(SATURDAY)
+    SUNDAY = DAYS.get(SUNDAY)
 
 
 class VendorSchedule(models.Model):
