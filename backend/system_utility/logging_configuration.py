@@ -1,8 +1,11 @@
 import structlog
 from os import environ
 
-ERROR_LOGGING_FILE = environ.get("ERROR_LOGGING_FILE", "./sakinah_error_log.log"),
-INFO_LOGGING_FILE = environ.get("INFO_LOGGING_FILE", "./sakinah_info_log.log"),
+ERROR_LOGGING_FILE = environ.get("ERROR_LOGGING_FILE", "./sakinah_error_log.log")
+INFO_LOGGING_FILE = environ.get("INFO_LOGGING_FILE", "./sakinah_info_log.log")
+DEBUG_LOGGING_FILE = environ.get("DEBUG_LOGGING_FILE", "./sakinah_debug_log.log")
+LOG_SOCKET_RECEIVER_PORT = environ.get('LOG_SOCKET_RECEIVER_PORT', '9020')
+LOG_SOCKET_RECEIVER_HOST = environ.get('LOG_SOCKET_RECEIVER_HOST', 'localhost')
 
 LOCAL_LOGGING = {
     "version": 1,
@@ -28,12 +31,17 @@ LOCAL_LOGGING = {
         },
         "error_json_file": {
             "class": "logging.handlers.WatchedFileHandler",
-            "filename": ERROR_LOGGING_FILE[0],
+            "filename": ERROR_LOGGING_FILE,
             "formatter": "json_formatter",
         },
         "info_json_file": {
             "class": "logging.handlers.WatchedFileHandler",
-            "filename": INFO_LOGGING_FILE[0],
+            "filename": INFO_LOGGING_FILE,
+            "formatter": "json_formatter",
+        },
+        "debug_json_file": {
+            "class": "logging.handlers.WatchedFileHandler",
+            "filename": DEBUG_LOGGING_FILE,
             "formatter": "json_formatter",
         },
     },
@@ -51,17 +59,13 @@ LOCAL_LOGGING = {
 }
 
 PRODUCTION_LOGGING = {
-    "version": 1,
-    "disable_existing_loggers": False,
+    "version": 1,  # the dictConfig format version
+    "disable_existing_loggers": False,  # retain the default loggers
     "formatters": {
-        "json_formatter": {
-            "()": structlog.stdlib.ProcessorFormatter,
-            "processor": structlog.processors.JSONRenderer(),
-        },
-        "plain_console": {
-            "()": structlog.stdlib.ProcessorFormatter,
-            "processor": structlog.dev.ConsoleRenderer(),
-        },
+        "verbose": {
+            "format": "{levelname} {asctime} {message}",
+            "style": "{",
+        }
     },
     "handlers": {
         "stream": {
@@ -69,8 +73,8 @@ PRODUCTION_LOGGING = {
         },
         "error_socket": {
             "class": "logging.handlers.SocketHandler",
-            "host": environ.get('LOG_SOCKET_RECEIVER_PORT', '9020'),
-            "port": environ.get('LOG_SOCKET_RECEIVER_HOST', 'localhost'),
+            "host": LOG_SOCKET_RECEIVER_HOST,
+            "port": LOG_SOCKET_RECEIVER_PORT,
         }
     },
     "loggers": {
