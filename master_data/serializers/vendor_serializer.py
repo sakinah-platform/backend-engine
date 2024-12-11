@@ -6,7 +6,16 @@ from master_data.serializers.vendor_package_serializer import VendorPackageSeria
 from master_data.serializers.vendor_schedule_serializer import VendorScheduleSerializer
 
 
-class VendorSerializer(serializers.ModelSerializer):
+class VendorListSerializer(serializers.ModelSerializer):
+    starting_price = serializers.IntegerField()
+
+    class Meta:
+        model = Vendor
+        fields = ['id', 'name', 'category', 'starting_price']
+        read_only_fields = ['id', 'name', 'category', 'starting_price']
+
+
+class VendorSerializer(VendorListSerializer):
     galleries = VendorGallerySerializer(many=True, read_only=True)
     packages = VendorPackageSerializer(many=True, read_only=True)
     schedules = VendorScheduleSerializer(many=True, read_only=True)

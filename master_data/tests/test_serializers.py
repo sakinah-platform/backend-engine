@@ -1,4 +1,5 @@
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.db.models import Min
 from django.test import TestCase
 
 from master_data.models.vendor_category import VendorCategory
@@ -10,7 +11,7 @@ from master_data.models.vendor import Vendor
 from master_data.serializers.vendor_gallery_serializer import VendorGallerySerializer
 from master_data.serializers.vendor_package_serializer import VendorPackageSerializer
 from master_data.serializers.vendor_schedule_serializer import VendorScheduleSerializer
-from master_data.serializers.vendor_serializer import VendorSerializer
+from master_data.serializers.vendor_serializer import VendorSerializer, VendorListSerializer
 
 import datetime
 
@@ -46,6 +47,41 @@ def set_up_all_vendor_resources():
                                   start_time=datetime.time(6, 0),
                                   end_time=datetime.time(8, 0),
                                   day=Day.SUNDAY)
+
+
+class TestVendorListSerializer(TestCase):
+    def setUp(self):
+        set_up_all_vendor_resources()
+
+        uploaded = dummy_image_file('small.jpg', 'image/jpeg')
+        cat = VendorCategory.objects.get(name='test_cat')
+        vendor_2 = Vendor.objects.create(name='test_vendor_2',
+                                         description='test_desc',
+                                         about='test_about',
+                                         email='test@email.com',
+                                         category=cat,
+                                         profile_image=uploaded)
+        VendorPackage.objects.create(name='test_package_2_1',
+                                     price=10,
+                                     vendor=vendor_2)
+        VendorPackage.objects.create(name='test_package_2_2',
+                                     price=1,
+                                     vendor=vendor_2)
+
+    def test_vendor_list_serializer_result(self):
+        vendors = Vendor.objects.annotate(starting_price=Min('packages__price'))
+        vendors_list_serializer = VendorListSerializer(vendors, many=True)
+        expected_data_result = [{'id': vendors.first().id,
+                                 'name': vendors.first().name,
+                                 'category': vendors.first().category.id,
+                                 'starting_price': 1
+                                 },
+                                {'id': vendors.last().id,
+                                 'name': vendors.last().name,
+                                 'category': vendors.last().category.id,
+                                 'starting_price': 1
+                                 }]
+        self.assertEqual(vendors_list_serializer.data, expected_data_result)
 
 
 class TestVendorSerializer(TestCase):
