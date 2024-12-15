@@ -11,8 +11,8 @@ class VendorListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Vendor
-        fields = ['id', 'name', 'category', 'starting_price']
-        read_only_fields = ['id', 'name', 'category', 'starting_price']
+        fields = ['id', 'name', 'profile_image', 'starting_price']
+        read_only_fields = ['id', 'name', 'profile_image', 'starting_price']
 
 
 class VendorSerializer(VendorListSerializer):
