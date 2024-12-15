@@ -73,12 +73,12 @@ class TestVendorListSerializer(TestCase):
         vendors_list_serializer = VendorListSerializer(vendors, many=True)
         expected_data_result = [{'id': vendors.first().id,
                                  'name': vendors.first().name,
-                                 'category': vendors.first().category.id,
+                                 'profile_image': vendors.first().profile_image.url,
                                  'starting_price': 1
                                  },
                                 {'id': vendors.last().id,
                                  'name': vendors.last().name,
-                                 'category': vendors.last().category.id,
+                                 'profile_image': vendors.last().profile_image.url,
                                  'starting_price': 1
                                  }]
         self.assertEqual(vendors_list_serializer.data, expected_data_result)
