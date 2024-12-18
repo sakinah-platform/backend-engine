@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from master_data.models.city import City
 from master_data.models.vendor_category import VendorCategory
 from master_data.models.vendor_gallery import VendorGallery
 from master_data.models.vendor_package import VendorPackage
@@ -12,6 +13,12 @@ from master_data.models.vendor import Vendor
 class VendorCategoryAdmin(admin.ModelAdmin):
 
     list_display = ('id', 'name', 'description', 'icon', 'created_at', 'updated_at')
+    search_fields = ['id', 'name', 'description']
+
+@admin.register(City)
+class CityAdmin(admin.ModelAdmin):
+
+    list_display = ('id', 'name', 'description', 'created_at', 'updated_at')
     search_fields = ['id', 'name', 'description']
 
 
