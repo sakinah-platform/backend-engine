@@ -52,19 +52,65 @@ To check whether your postgres database is running in the docker container, run 
 docker ps
 ```
 
+Before running server in your local, you need to run db migration by executing the following command
+```shell
+python manage.py migrate
+```
+
+When you edit models, if you want to make new migration of the new model changes, run this command
+```shell
+python manage.py makemigrations <app>
+```
+
+To show all migrations applied, run this command
+```shell
+python manage.py showmigrations
+```
+
+To rollback migration, run this command and specify the migration state
+```shell
+python manage.py migrate <app> <000X_expected migration state>
+```
+To rollback to the very first state, run
+```shell
+python manage.py migrate <app> zero
+```
+
 Once development is done in your local machine, you can shut down your database (or any container service in Backend Engine) by running this command.
 
 ```shell
 docker-compose down
 ```
+
+### Run Server
+
 Finally, to run Backend Engine, run the following command.
 ```shell
 python manage.py runserver
 ```
 Backend Engine should be running in your machine and can be accessed at your `localhost:8000`.
 
-## Test
-TBD
+## Test, Code Coverage, and Linter
+
+To run tests, run the following command
+```shell
+python manage.py test 
+```
+
+To check code coverage, run
+```shell
+coverage report -m --skip-covered
+```
+
+To check linter violation, run
+```shell
+flake8 <app>
+```
+
+And finally, to fix any linter violation, run
+```shell
+autopep8 --in-place --recursive <app>
+```
 
 ## API Doc
-The list of available APIs can be found at TBD
+The list of available APIs can be found at `localhost:8000/`.
