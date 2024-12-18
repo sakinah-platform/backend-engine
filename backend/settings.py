@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'rest_framework',
     'drf_spectacular',
     'drf_standardized_errors',
@@ -231,3 +232,21 @@ DRF_STANDARDIZED_ERRORS = {
     "ENABLE_IN_DEBUG_FOR_UNHANDLED_EXCEPTIONS": True,
     "EXCEPTION_HANDLER_CLASS": "backend.system_utility.custom_exception_handler.ExceptionHandlerWithLogging"
 }
+
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'https://sakinah.hafiyyansayy.id',
+    'https://andieni-be-staging.ui.ac.id',
+    'https://sakinah-fikar.vercel.app'
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'https://sakinah.hafiyyansayy.id',
+    'https://andieni-be-staging.ui.ac.id',
+    'https://sakinah-fikar.vercel.app'
+]
