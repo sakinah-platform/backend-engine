@@ -19,20 +19,20 @@ FRIDAY = 'friday'
 SATURDAY = 'saturday'
 SUNDAY = 'sunday'
 
-SENIN = 'senin'
-SELASA = 'selasa'
-RABU = 'rabu'
-KAMIS = 'kamis'
-JUMAT = 'jumat'
-SABTU = 'sabtu'
-MINGGU = 'minggu'
+SENIN = 'Senin'
+SELASA = 'Selasa'
+RABU = 'Rabu'
+KAMIS = 'Kamis'
+JUMAT = 'Jumat'
+SABTU = 'Sabtu'
+MINGGU = 'Minggu'
 
-DAYS: Dict = {
-    MONDAY: SENIN,
-    TUESDAY: SELASA,
-    WEDNESDAY: RABU,
-    THURSDAY: KAMIS,
-    FRIDAY: JUMAT,
-    SATURDAY: SABTU,
-    SUNDAY: MINGGU,
-}
+DAYS = [
+  (SENIN, SENIN),
+  (SELASA, SELASA),
+  (RABU, RABU),
+  (KAMIS, KAMIS),
+  (JUMAT, JUMAT),
+  (SABTU, SABTU),
+  (MINGGU, MINGGU),
+]

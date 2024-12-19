@@ -6,8 +6,10 @@ from django.test import TestCase
 from master_data.models.vendor_category import VendorCategory
 from master_data.models.vendor_gallery import VendorGallery
 from master_data.models.vendor_package import VendorPackage
-from master_data.models.vendor_schedule import VendorSchedule, Day
+from master_data.models.vendor_schedule import VendorSchedule
 from master_data.models.vendor import Vendor
+
+from backend.system_utility.system_constant import MINGGU
 
 import datetime
 
@@ -213,11 +215,11 @@ class TestVendorSchedule(TestCase):
         VendorSchedule.objects.create(vendor=vendor,
                                       start_time=datetime.time(6, 0),
                                       end_time=datetime.time(8, 0),
-                                      day=Day.SUNDAY)
+                                      day=MINGGU)
         VendorSchedule.objects.create(vendor=vendor,
                                       start_time=datetime.time(8, 0),
                                       end_time=datetime.time(10, 0),
-                                      day=Day.SUNDAY).delete()
+                                      day=MINGGU).delete()
 
     def test_get_vendor_schedule_return_not_soft_deleted_package(self):
         vendor_schedule_count = VendorSchedule.objects.count()
@@ -230,7 +232,7 @@ class TestVendorSchedule(TestCase):
         duplicate_schedule = VendorSchedule.objects.create(vendor=vendor,
                                                            start_time=datetime.time(6, 0),
                                                            end_time=datetime.time(8, 0),
-                                                           day=Day.SUNDAY)
+                                                           day=MINGGU)
         expected_error_message = 'Schedule for test_vendor already exists'
         with self.assertRaisesMessage(ValidationError, expected_error_message):
             duplicate_schedule.full_clean()
