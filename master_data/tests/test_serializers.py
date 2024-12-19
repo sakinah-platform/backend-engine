@@ -5,13 +5,15 @@ from django.test import TestCase
 from master_data.models.vendor_category import VendorCategory
 from master_data.models.vendor_gallery import VendorGallery
 from master_data.models.vendor_package import VendorPackage
-from master_data.models.vendor_schedule import VendorSchedule, Day
+from master_data.models.vendor_schedule import VendorSchedule
 from master_data.models.vendor import Vendor
 
 from master_data.serializers.vendor_gallery_serializer import VendorGallerySerializer
 from master_data.serializers.vendor_package_serializer import VendorPackageSerializer
 from master_data.serializers.vendor_schedule_serializer import VendorScheduleSerializer
 from master_data.serializers.vendor_serializer import VendorSerializer, VendorListSerializer
+
+from backend.system_utility.system_constant import MINGGU
 
 import datetime
 
@@ -46,7 +48,7 @@ def set_up_all_vendor_resources():
     VendorSchedule.objects.create(vendor=vendor,
                                   start_time=datetime.time(6, 0),
                                   end_time=datetime.time(8, 0),
-                                  day=Day.SUNDAY)
+                                  day=MINGGU)
 
 
 class TestVendorListSerializer(TestCase):
