@@ -2,19 +2,8 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django_softdelete.models import SoftDeleteModel
 
-from backend.system_utility.system_constant import DAYS, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+from backend.system_utility.system_constant import DAYS
 from master_data.models.vendor import Vendor
-
-
-class Day(models.TextChoices):
-
-    MONDAY = DAYS.get(MONDAY)
-    TUESDAY = DAYS.get(TUESDAY)
-    WEDNESDAY = DAYS.get(WEDNESDAY)
-    THURSDAY = DAYS.get(THURSDAY)
-    FRIDAY = DAYS.get(FRIDAY)
-    SATURDAY = DAYS.get(SATURDAY)
-    SUNDAY = DAYS.get(SUNDAY)
 
 
 class VendorSchedule(SoftDeleteModel):
@@ -23,7 +12,7 @@ class VendorSchedule(SoftDeleteModel):
                                   null=False)
     end_time = models.TimeField(blank=False,
                                 null=False)
-    day = models.CharField(choices=Day.choices,
+    day = models.CharField(choices=DAYS,
                            blank=False,
                            null=False)
     vendor = models.ForeignKey(Vendor,
