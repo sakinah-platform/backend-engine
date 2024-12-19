@@ -15,6 +15,7 @@ class VendorCategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'description', 'icon', 'created_at', 'updated_at')
     search_fields = ['id', 'name', 'description']
 
+
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
 

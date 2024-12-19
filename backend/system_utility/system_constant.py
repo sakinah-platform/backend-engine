@@ -10,29 +10,46 @@ SYSTEM_CONSTANT: Dict = {SERVICE_UNAVAILABLE_STRCODE: SERVICE_UNAVAILABLE_MESSAG
                          SYSTEM_UNKNOWN_ERR_STRCODE: SYSTEM_UNKNOWN_ERR_MESSAGE
 
                          }
+MONDAY_ENUM = 'MO'
+TUESDAY_ENUM = 'TU'
+WEDNESDAY_ENUM = 'WE'
+THURSDAY_ENUM = 'TH'
+FRIDAY_ENUM = 'FR'
+SATURDAY_ENUM = 'SA'
+SUNDAY_ENUM = 'SU'
 
-MONDAY = 'monday'
-TUESDAY = 'tuesday'
-WEDNESDAY = 'wednesday'
-THURSDAY = 'thursday'
-FRIDAY = 'friday'
-SATURDAY = 'saturday'
-SUNDAY = 'sunday'
+MONDAY = 'Monday'
+TUESDAY = 'Tuesday'
+WEDNESDAY = 'Wednesday'
+THURSDAY = 'Thursday'
+FRIDAY = 'Friday'
+SATURDAY = 'Saturday'
+SUNDAY = 'Sunday'
 
-SENIN = 'senin'
-SELASA = 'selasa'
-RABU = 'rabu'
-KAMIS = 'kamis'
-JUMAT = 'jumat'
-SABTU = 'sabtu'
-MINGGU = 'minggu'
+SENIN = 'Senin'
+SELASA = 'Selasa'
+RABU = 'Rabu'
+KAMIS = 'Kamis'
+JUMAT = 'Jumat'
+SABTU = 'Sabtu'
+MINGGU = 'Minggu'
 
-DAYS: Dict = {
-    MONDAY: SENIN,
-    TUESDAY: SELASA,
-    WEDNESDAY: RABU,
-    THURSDAY: KAMIS,
-    FRIDAY: JUMAT,
-    SATURDAY: SABTU,
-    SUNDAY: MINGGU,
-}
+DAYS = [
+  (MONDAY_ENUM, SENIN),
+  (TUESDAY_ENUM, SELASA),
+  (WEDNESDAY_ENUM, RABU),
+  (THURSDAY_ENUM, KAMIS),
+  (FRIDAY_ENUM, JUMAT),
+  (SATURDAY_ENUM, SABTU),
+  (SUNDAY_ENUM, MINGGU),
+]
+
+ENGLISH_DAYS = [
+  (MONDAY_ENUM, MONDAY),
+  (TUESDAY_ENUM, TUESDAY),
+  (WEDNESDAY_ENUM, WEDNESDAY),
+  (THURSDAY_ENUM, THURSDAY),
+  (FRIDAY_ENUM, FRIDAY),
+  (SATURDAY_ENUM, SABTU),
+  (SUNDAY_ENUM, MINGGU),
+]
