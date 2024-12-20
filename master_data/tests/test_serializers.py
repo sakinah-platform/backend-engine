@@ -3,6 +3,7 @@ from django.db.models import Min
 from django.test import TestCase
 
 from master_data.models.vendor_category import VendorCategory
+from master_data.models.city import City
 from master_data.models.vendor_gallery import VendorGallery
 from master_data.models.vendor_package import VendorPackage
 from master_data.models.vendor_schedule import VendorSchedule
@@ -34,11 +35,13 @@ def set_up_all_vendor_resources():
     cat = VendorCategory.objects.create(name='test_cat',
                                         description='test_desc',
                                         icon=uploaded)
+    city = City.objects.create(name='Garut', description='test city')
     vendor = Vendor.objects.create(name='test_vendor',
                                    description='test_desc',
                                    about='test_about',
                                    email='test@email.com',
                                    category=cat,
+                                   city=city,
                                    profile_image=uploaded)
     VendorGallery.objects.create(image=uploaded,
                                  vendor=vendor)
@@ -57,11 +60,13 @@ class TestVendorListSerializer(TestCase):
 
         uploaded = dummy_image_file('small.jpg', 'image/jpeg')
         cat = VendorCategory.objects.get(name='test_cat')
+        city = City.objects.get(name='Garut')
         vendor_2 = Vendor.objects.create(name='test_vendor_2',
                                          description='test_desc',
                                          about='test_about',
                                          email='test@email.com',
                                          category=cat,
+                                         city=city,
                                          profile_image=uploaded)
         VendorPackage.objects.create(name='test_package_2_1',
                                      price=10,

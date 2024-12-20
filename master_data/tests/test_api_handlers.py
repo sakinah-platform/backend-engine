@@ -4,6 +4,7 @@ from rest_framework.test import APITestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from master_data.models.vendor_category import VendorCategory
+from master_data.models.city import City
 from master_data.models.vendor import Vendor
 from master_data.models.vendor_package import VendorPackage
 
@@ -27,11 +28,13 @@ def set_up_all_vendor_resources():
     cat_2 = VendorCategory.objects.create(name='test_cat_2',
                                           description='test_desc',
                                           icon=uploaded)
+    city = City.objects.create(name='Garut', description='test city')
     vendor = Vendor.objects.create(name='test_vendor',
                                    description='test_desc',
                                    about='test_about',
                                    email='test@email.com',
                                    category=cat,
+                                   city=city,
                                    profile_image=uploaded)
     VendorPackage.objects.create(name='test_package_2_1',
                                  price=10,

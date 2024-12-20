@@ -5,6 +5,7 @@ from os import path
 
 from master_data.utility.media_utility import rel_path, ALLOWED_IMAGE_EXTENSIONS
 from master_data.models.vendor_category import VendorCategory
+from master_data.models.city import City
 
 alphanumeric_validator = RegexValidator(r'^[0-9a-zA-Z-_@.,]*$',
                                         'Only alphanumeric characters, dot (.), comma (,), at symbol (@) and minus (-) are allowed.')
@@ -28,6 +29,11 @@ class Vendor(SoftDeleteModel):
                             blank=False,
                             null=False)
     description = models.TextField(blank=False, null=False)
+    address = models.TextField(blank=True, null=False)
+    city = models.ForeignKey(City,
+                             on_delete=models.PROTECT,
+                             blank=False,
+                             null=False)
     about = models.TextField(blank=False, null=False)
     category = models.ForeignKey(VendorCategory,
                                  on_delete=models.PROTECT,
