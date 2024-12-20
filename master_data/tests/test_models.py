@@ -4,6 +4,7 @@ from django.db.utils import IntegrityError
 from django.test import TestCase
 
 from master_data.models.vendor_category import VendorCategory
+from master_data.models.city import City
 from master_data.models.vendor_gallery import VendorGallery
 from master_data.models.vendor_package import VendorPackage
 from master_data.models.vendor_schedule import VendorSchedule
@@ -47,20 +48,24 @@ class TestVendor(TestCase):
 
     def setUp(self):
         uploaded = dummy_image_file('small.jpg', 'image/jpeg')
+        city = City.objects.create(name='Garut', description='test city')
         cat = VendorCategory.objects.create(name='test_cat',
                                             description='test_desc',
                                             icon=uploaded)
+
         Vendor.objects.create(name='test_vendor',
                               description='test_desc',
                               about='test_about',
                               email='test@test.com',
                               category=cat,
+                              city=city,
                               profile_image=uploaded)
         Vendor.objects.create(name='test_vendor_del',
                               description='test_desc',
                               about='test_about',
                               email='test@test.com',
                               category=cat,
+                              city=city,
                               profile_image=uploaded).delete()
 
     def test_get_vendor_return_not_soft_deleted_vendor(self):
@@ -73,12 +78,13 @@ class TestVendor(TestCase):
     def test_vendor_profile_image_extension_validation(self):
         cat = VendorCategory.objects.get(name='test_cat')
         uploaded_gif = dummy_image_file('small.gif', 'image/gif')
-
+        city = City.objects.get(name='Garut')
         vendor = Vendor.objects.create(name='test_vendor_gif',
                                        description='test_desc',
                                        about='test_about',
                                        email='test@test.com',
                                        category=cat,
+                                       city=city,
                                        profile_image=uploaded_gif)
         expected_error_message = 'File extension “gif” is not allowed. Allowed extensions are: jpg, jpeg, png.'
         with self.assertRaisesMessage(ValidationError, expected_error_message):
@@ -88,13 +94,14 @@ class TestVendor(TestCase):
         cat = VendorCategory.objects.get(name='test_cat')
         uploaded = dummy_image_file('small.jpg', 'image/jpeg')
         username_violation = '#invalid-user&'
-
+        city = City.objects.get(name='Garut')
         vendor_fb = Vendor.objects.create(name='test_vendor_fb',
                                           description='test_desc',
                                           about='test_about',
                                           email='test@test.com',
                                           facebook=username_violation,
                                           category=cat,
+                                          city=city,
                                           profile_image=uploaded)
         vendor_ig = Vendor.objects.create(name='test_vendor_ig',
                                           description='test_desc',
@@ -102,6 +109,7 @@ class TestVendor(TestCase):
                                           email='test@test.com',
                                           instagram=username_violation,
                                           category=cat,
+                                          city=city,
                                           profile_image=uploaded)
         vendor_tt = Vendor.objects.create(name='test_vendor_tt',
                                           description='test_desc',
@@ -109,6 +117,7 @@ class TestVendor(TestCase):
                                           email='test@test.com',
                                           tiktok=username_violation,
                                           category=cat,
+                                          city=city,
                                           profile_image=uploaded)
         vendor_yt = Vendor.objects.create(name='test_vendor_yt',
                                           description='test_desc',
@@ -116,6 +125,7 @@ class TestVendor(TestCase):
                                           email='test@test.com',
                                           youtube=username_violation,
                                           category=cat,
+                                          city=city,
                                           profile_image=uploaded)
 
         expected_error_message = 'Only alphanumeric characters, dot (.), comma (,), at symbol (@) and minus (-) are allowed.'
@@ -137,11 +147,13 @@ class TestVendorGallery(TestCase):
         cat = VendorCategory.objects.create(name='test_cat',
                                             description='test_desc',
                                             icon=uploaded)
+        city = City.objects.create(name='Garut', description='test city')
         vendor = Vendor.objects.create(name='test_vendor',
                                        description='test_desc',
                                        about='test_about',
                                        email='test@test.com',
                                        category=cat,
+                                       city=city,
                                        profile_image=uploaded)
         VendorGallery.objects.create(image=uploaded,
                                      vendor=vendor)
@@ -172,11 +184,13 @@ class TestVendorPackage(TestCase):
         cat = VendorCategory.objects.create(name='test_cat',
                                             description='test_desc',
                                             icon=uploaded)
+        city = City.objects.create(name='Garut', description='test city')
         vendor = Vendor.objects.create(name='test_vendor',
                                        description='test_desc',
                                        about='test_about',
                                        email='test@test.com',
                                        category=cat,
+                                       city=city,
                                        profile_image=uploaded)
         VendorPackage.objects.create(name='test_package',
                                      price=1,
@@ -206,11 +220,13 @@ class TestVendorSchedule(TestCase):
         cat = VendorCategory.objects.create(name='test_cat',
                                             description='test_desc',
                                             icon=uploaded)
+        city = City.objects.create(name='Garut', description='test city')
         vendor = Vendor.objects.create(name='test_vendor',
                                        description='test_desc',
                                        about='test_about',
                                        email='test@test.com',
                                        category=cat,
+                                       city=city,
                                        profile_image=uploaded)
         VendorSchedule.objects.create(vendor=vendor,
                                       start_time=datetime.time(6, 0),

@@ -4,6 +4,7 @@ from rest_framework.test import APITestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from master_data.models.vendor_category import VendorCategory
+from master_data.models.city import City
 from master_data.models.vendor import Vendor
 from master_data.models.vendor_package import VendorPackage
 
@@ -27,11 +28,14 @@ def set_up_all_vendor_resources():
     cat_2 = VendorCategory.objects.create(name='test_cat_2',
                                           description='test_desc',
                                           icon=uploaded)
+    city = City.objects.create(name='Garut', description='test city')
+    city_2 = City.objects.create(name='Tasikmalaya', description='test city')
     vendor = Vendor.objects.create(name='test_vendor',
                                    description='test_desc',
                                    about='test_about',
                                    email='test@email.com',
                                    category=cat,
+                                   city=city,
                                    profile_image=uploaded)
     VendorPackage.objects.create(name='test_package_2_1',
                                  price=10,
@@ -144,6 +148,42 @@ class TestVendorHandler(APITestCase):
         response = self.client.get(url, format='json')
 
         expected_error = [{'attr': 'category', 'code': 'invalid_choice', 'detail': 'Select a valid choice. That choice is not one of the available choices.'}]
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['errors'], expected_error)
+
+    def test_get_vendor_list_by_city_vendor_found(self):
+        vendor = Vendor.objects.get(name='test_vendor')
+        url = f'/master_data/vendors/?city={vendor.city.id}'
+        response = self.client.get(url, format='json')
+
+        expected_vendor_list = [
+            {
+                'id': vendor.id,
+                'name': vendor.name,
+                'profile_image': 'http://testserver' + vendor.profile_image.url,
+                'starting_price': 10
+            }
+        ]
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['results'], expected_vendor_list)
+
+    def test_get_vendor_list_by_city_vendor_not_found(self):
+        city = City.objects.get(name='Tasikmalaya')
+        url = f'/master_data/vendors/?city={city.id}'
+        response = self.client.get(url, format='json')
+
+        expected_vendor_list = []
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['results'], expected_vendor_list)
+
+    def test_get_vendor_list_by_city_city_not_valid(self):
+        url = f'/master_data/vendors/?city=90'
+        response = self.client.get(url, format='json')
+
+        expected_error = [{'attr': 'city', 'code': 'invalid_choice', 'detail': 'Select a valid choice. That choice is not one of the available choices.'}]
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(response.data['errors'], expected_error)
