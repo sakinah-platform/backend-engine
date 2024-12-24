@@ -19,6 +19,7 @@ class VendorSerializer(VendorListSerializer):
     galleries = VendorGallerySerializer(many=True, read_only=True)
     packages = VendorPackageSerializer(many=True, read_only=True)
     schedules = VendorScheduleSerializer(many=True, read_only=True)
+    city = serializers.StringRelatedField()
 
     class Meta:
         model = Vendor
@@ -37,7 +38,8 @@ class VendorSerializer(VendorListSerializer):
                   'visibility',
                   'galleries',
                   'packages',
-                  'schedules']
+                  'schedules',
+                  'city']
         read_only_fields = ['id',
                             'name',
                             'description',
@@ -50,4 +52,5 @@ class VendorSerializer(VendorListSerializer):
                             'youtube',
                             'profile_image',
                             'availability',
-                            'visibility']
+                            'visibility',
+                            'city']

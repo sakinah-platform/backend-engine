@@ -33,7 +33,8 @@ class Vendor(SoftDeleteModel):
     city = models.ForeignKey(City,
                              on_delete=models.PROTECT,
                              blank=False,
-                             null=False)
+                             null=False,
+                             default=1)
     about = models.TextField(blank=False, null=False)
     category = models.ForeignKey(VendorCategory,
                                  on_delete=models.PROTECT,
