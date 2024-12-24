@@ -19,7 +19,8 @@ class VendorFilter(filters.FilterSet):
     class Meta:
         model = Vendor
         fields = {
-            'category': ['exact']
+            'category': ['exact'],
+            'city': ['exact']
         }
 
 
