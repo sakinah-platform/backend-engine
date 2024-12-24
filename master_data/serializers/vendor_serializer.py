@@ -8,11 +8,13 @@ from master_data.serializers.vendor_schedule_serializer import VendorScheduleSer
 
 class VendorListSerializer(serializers.ModelSerializer):
     starting_price = serializers.IntegerField()
+    city = serializers.StringRelatedField()
+    category = serializers.StringRelatedField()
 
     class Meta:
         model = Vendor
-        fields = ['id', 'name', 'profile_image', 'starting_price']
-        read_only_fields = ['id', 'name', 'profile_image', 'starting_price']
+        fields = ['id', 'name', 'profile_image', 'starting_price', 'city', 'category']
+        read_only_fields = ['id', 'name', 'profile_image', 'starting_price', 'city', 'category']
 
 
 class VendorSerializer(VendorListSerializer):
