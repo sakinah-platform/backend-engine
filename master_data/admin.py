@@ -6,6 +6,7 @@ from master_data.models.vendor_gallery import VendorGallery
 from master_data.models.vendor_package import VendorPackage
 from master_data.models.vendor_schedule import VendorSchedule
 from master_data.models.vendor import Vendor
+from master_data.models.package_gallery import PackageGallery
 
 
 # Register your models here.
@@ -72,6 +73,18 @@ class VendorPackageAdmin(admin.ModelAdmin):
     search_fields = ['id',
                      'name',
                      'vendor']
+
+
+@admin.register(PackageGallery)
+class PackageGalleryAdmin(admin.ModelAdmin):
+
+    list_display = ('id',
+                    'image',
+                    'package',
+                    'created_at',
+                    'updated_at')
+    search_fields = ['id',
+                     'package']
 
 
 @admin.register(VendorSchedule)

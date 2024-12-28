@@ -7,6 +7,7 @@ from django.db.models import QuerySet
 from backend.system_utility.system_constant import DAYS
 from master_data.models.vendor_schedule import VendorSchedule
 
+
 class Migration(migrations.Migration):
 
     dependencies = [
