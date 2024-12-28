@@ -13,6 +13,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='vendorschedule',
             name='day',
-            field=models.CharField(choices=[('MO', 'Senin'), ('TU', 'Selasa'), ('WE', 'Rabu'), ('TH', 'Kamis'), ('FR', 'Jumat'), ('SA', 'Sabtu'), ('SU', 'Minggu')]),
+            field=models.CharField(choices=[('MO', 'Senin'), ('TU', 'Selasa'), ('WE', 'Rabu'),
+                                   ('TH', 'Kamis'), ('FR', 'Jumat'), ('SA', 'Sabtu'), ('SU', 'Minggu')]),
         ),
     ]

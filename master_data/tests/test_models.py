@@ -9,6 +9,7 @@ from master_data.models.vendor_gallery import VendorGallery
 from master_data.models.vendor_package import VendorPackage
 from master_data.models.vendor_schedule import VendorSchedule
 from master_data.models.vendor import Vendor
+from master_data.models.package_gallery import PackageGallery
 
 from backend.system_utility.system_constant import MINGGU
 
@@ -211,6 +212,46 @@ class TestVendorPackage(TestCase):
 
         expected_package_count = 1
         self.assertEqual(vendor_package_count, expected_package_count)
+
+
+class TestPackageGallery(TestCase):
+
+    def setUp(self):
+        uploaded = dummy_image_file('small.jpg', 'image/jpeg')
+        cat = VendorCategory.objects.create(name='test_cat',
+                                            description='test_desc',
+                                            icon=uploaded)
+        city = City.objects.create(name='Garut', description='test city')
+        vendor = Vendor.objects.create(name='test_vendor',
+                                       description='test_desc',
+                                       about='test_about',
+                                       email='test@test.com',
+                                       category=cat,
+                                       city=city,
+                                       profile_image=uploaded)
+        package = VendorPackage.objects.create(name='test_package',
+                                               price=1,
+                                               vendor=vendor)
+        PackageGallery.objects.create(image=uploaded,
+                                      package=package)
+        PackageGallery.objects.create(image=uploaded,
+                                      package=package).delete()
+
+    def test_get_package_gallery_return_not_soft_deleted_image(self):
+        package_galleries_count = PackageGallery.objects.count()
+
+        expected_images_count = 1
+        self.assertEqual(package_galleries_count, expected_images_count)
+
+    def test_package_gallery_extension_validation(self):
+        package = VendorPackage.objects.get(name='test_package')
+        uploaded_gif = dummy_image_file('small.gif', 'image/gif')
+
+        package_gallery = PackageGallery.objects.create(image=uploaded_gif,
+                                                        package=package)
+        expected_error_message = 'File extension “gif” is not allowed. Allowed extensions are: jpg, jpeg, png.'
+        with self.assertRaisesMessage(ValidationError, expected_error_message):
+            package_gallery.full_clean()
 
 
 class TestVendorSchedule(TestCase):

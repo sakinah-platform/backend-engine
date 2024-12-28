@@ -1,12 +1,15 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
-
+from django.db.models import OuterRef
 from django.core.files.uploadedfile import SimpleUploadedFile
 
 from master_data.models.vendor_category import VendorCategory
 from master_data.models.city import City
 from master_data.models.vendor import Vendor
 from master_data.models.vendor_package import VendorPackage
+from master_data.models.package_gallery import PackageGallery
+
+from master_data.serializers.package_gallery_serializer import PackageGallerySerializer
 
 
 def dummy_image_file(file_name, content_type):
@@ -37,9 +40,12 @@ def set_up_all_vendor_resources():
                                    category=cat,
                                    city=city,
                                    profile_image=uploaded)
-    VendorPackage.objects.create(name='test_package_2_1',
-                                 price=10,
-                                 vendor=vendor)
+    package = VendorPackage.objects.create(name='test_package_2_1',
+                                           price=10,
+                                           vendor=vendor,
+                                           description={'min_package': 100})
+    PackageGallery.objects.create(image=uploaded,
+                                  package=package)
 
 
 class TestVendorHandler(APITestCase):
@@ -83,7 +89,9 @@ class TestVendorHandler(APITestCase):
                 'id': vendor.id,
                 'name': vendor.name,
                 'profile_image': 'http://testserver' + vendor.profile_image.url,
-                'starting_price': 10
+                'starting_price': 10,
+                'city': vendor.city.name,
+                'category': vendor.category.name
             }
         ]
 
@@ -100,7 +108,9 @@ class TestVendorHandler(APITestCase):
                 'id': vendor.id,
                 'name': vendor.name,
                 'profile_image': 'http://testserver' + vendor.profile_image.url,
-                'starting_price': 10
+                'starting_price': 10,
+                'city': vendor.city.name,
+                'category': vendor.category.name
             }
         ]
 
@@ -126,7 +136,9 @@ class TestVendorHandler(APITestCase):
                 'id': vendor.id,
                 'name': vendor.name,
                 'profile_image': 'http://testserver' + vendor.profile_image.url,
-                'starting_price': 10
+                'starting_price': 10,
+                'city': vendor.city.name,
+                'category': vendor.category.name
             }
         ]
 
@@ -162,7 +174,9 @@ class TestVendorHandler(APITestCase):
                 'id': vendor.id,
                 'name': vendor.name,
                 'profile_image': 'http://testserver' + vendor.profile_image.url,
-                'starting_price': 10
+                'starting_price': 10,
+                'city': vendor.city.name,
+                'category': vendor.category.name
             }
         ]
 
@@ -198,7 +212,9 @@ class TestVendorHandler(APITestCase):
                 'id': vendor.id,
                 'name': vendor.name,
                 'profile_image': 'http://testserver' + vendor.profile_image.url,
-                'starting_price': 10
+                'starting_price': 10,
+                'city': vendor.city.name,
+                'category': vendor.category.name
             }
         ]
 
@@ -214,3 +230,97 @@ class TestVendorHandler(APITestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['results'], expected_vendor_list)
+
+
+class TestVendorPackageHandler(APITestCase):
+    vendor_id = 0
+    package_id = 0
+
+    def setUp(self):
+        set_up_all_vendor_resources()
+        self.vendor_id = Vendor.objects.get(name='test_vendor').id
+        self.package_id = VendorPackage.objects.get(vendor=self.vendor_id).id
+
+    def test_get_vendor_package_is_found(self):
+        url = f'/master_data/vendors/{self.vendor_id}/packages/{self.package_id}/'
+        response = self.client.get(url, format='json')
+
+        expected_vendor_package_name = 'test_package_2_1'
+        expected_vendor_package_description = {'min_package': 100}
+        expected_vendor_package_price = 10
+        expected_vendor_package_terms_and_condition = ''
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['name'], expected_vendor_package_name)
+        self.assertEqual(response.data['description'], expected_vendor_package_description)
+        self.assertEqual(response.data['price'], expected_vendor_package_price)
+        self.assertEqual(response.data['terms_and_condition'], expected_vendor_package_terms_and_condition)
+
+    def test_get_vendor_package_is_not_found(self):
+        url = f'/master_data/vendors/{self.vendor_id}/packages/999/'
+        response = self.client.get(url, format='json')
+
+        expected_error = [{'attr': None, 'code': 'not_found', 'detail': 'Not found.'}]
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['errors'], expected_error)
+
+    def test_get_vendor_is_not_found(self):
+        url = f'/master_data/vendors/999/packages/{self.package_id}/'
+        response = self.client.get(url, format='json')
+
+        expected_error = [{'attr': None, 'code': 'not_found', 'detail': 'A vendor with this id does not exist.'}]
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.data['errors'], expected_error)
+
+    def test_get_vendor_package_list(self):
+        url = f'/master_data/vendors/{self.vendor_id}/packages/'
+        response = self.client.get(url, format='json')
+        packages = VendorPackage.objects.filter(vendor_id=self.vendor_id)
+
+        expected_vendor_package_list = [
+            {
+                'id': packages.first().id,
+                'name': packages.first().name,
+                'first_image': {
+                    'id': packages.first().galleries.first().id,
+                    'image': 'http://testserver' + packages.first().galleries.first().image.url
+                },
+                'price': packages.first().price,
+                'description': packages.first().description,
+            }
+        ]
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['results'], expected_vendor_package_list)
+
+    def test_get_vendor_package_list_short_desc_found(self):
+        url = f'/master_data/vendors/{self.vendor_id}/packages/?description=100'
+        response = self.client.get(url, format='json')
+        packages = VendorPackage.objects.filter(vendor_id=self.vendor_id)
+
+        expected_vendor_package_list = [
+            {
+                'id': packages.first().id,
+                'name': packages.first().name,
+                'first_image': {
+                    'id': packages.first().galleries.first().id,
+                    'image': 'http://testserver' + packages.first().galleries.first().image.url
+                },
+                'price': packages.first().price,
+                'description': packages.first().description,
+            }
+        ]
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['results'], expected_vendor_package_list)
+
+    def test_get_vendor_package_list_short_desc_not_found(self):
+        url = f'/master_data/vendors/{self.vendor_id}/packages/?description=1000'
+        response = self.client.get(url, format='json')
+
+        expected_vendor_package_list = []
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['results'], expected_vendor_package_list)

@@ -16,6 +16,8 @@ class VendorPackage(SoftDeleteModel):
                                blank=False)
     price = models.PositiveIntegerField(blank=False, null=False)
     description = models.TextField(blank=False, null=False)
+    short_descriptions = models.JSONField(blank=True, null=True)
+    terms_and_condition = models.TextField(blank=False, null=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -27,3 +29,7 @@ class VendorPackage(SoftDeleteModel):
 
     def __str__(self):
         return self.name
+
+    @property
+    def first_image(self):
+        return self.galleries.first()
