@@ -165,13 +165,13 @@ class TestVendorPackageListSerializer(TestCase):
         first_package_gallery_serializer = PackageGallerySerializer(vendor_packages.first().galleries.first())
         last_package_gallery_serializer = PackageGallerySerializer(vendor_packages.last().galleries.first())
         vendor_packages_list_serializer = VendorPackageListSerializer(vendor_packages, many=True)
-        expected_data_result = [{'id': vendor_packages.first().id,
+        expected_data_result = [{'id': str(vendor_packages.first().id),
                                  'name': vendor_packages.first().name,
                                  'first_image': first_package_gallery_serializer.data,
                                  'price': vendor_packages.first().price,
                                  'description': vendor_packages.first().description
                                  },
-                                {'id': vendor_packages.last().id,
+                                {'id': str(vendor_packages.last().id),
                                  'name': vendor_packages.last().name,
                                  'first_image': last_package_gallery_serializer.data,
                                  'price': vendor_packages.last().price,
@@ -188,7 +188,7 @@ class TestVendorPackageSerializer(TestCase):
         package = VendorPackage.objects.get(name='test_package')
         package_serializer = VendorPackageSerializer(package)
         package_gallery_serializer = PackageGallerySerializer(package.galleries, many=True)
-        expected_data_result = {'id': package.id,
+        expected_data_result = {'id': str(package.id),
                                 'name': package.name,
                                 'description': package.description,
                                 'price': package.price,

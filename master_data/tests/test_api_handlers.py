@@ -283,7 +283,7 @@ class TestVendorPackageHandler(APITestCase):
 
         expected_vendor_package_list = [
             {
-                'id': packages.first().id,
+                'id': str(packages.first().id),
                 'name': packages.first().name,
                 'first_image': {
                     'id': packages.first().galleries.first().id,
@@ -304,7 +304,7 @@ class TestVendorPackageHandler(APITestCase):
 
         expected_vendor_package_list = [
             {
-                'id': packages.first().id,
+                'id': str(packages.first().id),
                 'name': packages.first().name,
                 'first_image': {
                     'id': packages.first().galleries.first().id,
