@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.core.validators import FileExtensionValidator, RegexValidator
 from django_softdelete.models import SoftDeleteModel
@@ -24,6 +26,7 @@ class Vendor(SoftDeleteModel):
         PRIVATE = 'private'
         PUBLIC = 'public'
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, unique=True)
     name = models.CharField(max_length=100,
                             unique=True,
                             blank=False,

@@ -84,14 +84,14 @@ class TestVendorListSerializer(TestCase):
     def test_vendor_list_serializer_result(self):
         vendors = Vendor.objects.annotate(starting_price=Min('packages__price'))
         vendors_list_serializer = VendorListSerializer(vendors, many=True)
-        expected_data_result = [{'id': vendors.first().id,
+        expected_data_result = [{'id': str(vendors.first().id),
                                  'name': vendors.first().name,
                                  'profile_image': vendors.first().profile_image.url,
                                  'starting_price': 1,
                                  'city': vendors.first().city.name,
                                  'category': vendors.first().category.name,
                                  },
-                                {'id': vendors.last().id,
+                                {'id': str(vendors.last().id),
                                  'name': vendors.last().name,
                                  'profile_image': vendors.last().profile_image.url,
                                  'starting_price': 1,
@@ -111,7 +111,7 @@ class TestVendorSerializer(TestCase):
         vendor_gallery_serializer = VendorGallerySerializer(vendor.galleries, many=True)
         vendor_package_serializer = VendorPackageSerializer(vendor.packages, many=True)
         vendor_schedule_serializer = VendorScheduleSerializer(vendor.schedules, many=True)
-        expected_data_result = {'id': vendor.id,
+        expected_data_result = {'id': str(vendor.id),
                                 'name': vendor.name,
                                 'description': vendor.description,
                                 'about': vendor.about,

@@ -22,7 +22,7 @@ class VendorPackageFilter(filters.FilterSet):
 
     class Meta:
         model = VendorPackage
-        fields = ['description']
+        fields = ['short_descriptions']
         filter_overrides = {
             models.JSONField: {
                 'filter_class': filters.CharFilter,
