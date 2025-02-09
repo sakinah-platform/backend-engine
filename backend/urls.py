@@ -34,6 +34,8 @@ urlpatterns = [
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
     path('rest/', include('rest_framework.urls'), name='rest_framework'),
     path('master_data/', include(master_data_router), name='master_data'),
+    path('accounts/', include('rest_registration.api.urls')),
+
 ]
 
 if not settings.PRODUCTION:
