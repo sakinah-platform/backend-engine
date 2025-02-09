@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 from os import environ, path
 
@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'drf_standardized_errors',
     'master_data',
+    'rest_framework_simplejwt'
 ]
 
 MIDDLEWARE = [
@@ -67,7 +68,11 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_SCHEMA_CLASS': 'drf_standardized_errors.openapi.AutoSchema',
-    'EXCEPTION_HANDLER': 'drf_standardized_errors.handler.exception_handler'
+    'EXCEPTION_HANDLER': 'drf_standardized_errors.handler.exception_handler',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
 }
 
 ROOT_URLCONF = 'backend.urls'
@@ -250,3 +255,16 @@ CSRF_TRUSTED_ORIGINS = [
     'https://andieni-be-staging.ui.ac.id',
     'https://sakinah-fikar.vercel.app'
 ]
+
+REST_REGISTRATION = {
+    'LOGIN_RETRIEVE_TOKEN': True,
+    'AUTH_TOKEN_MANAGER_CLASS': 'master_data.authentication_system.token_management.SimpleJWTAuthTokenManager'
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "SIGNING_KEY": SECRET_KEY,
+    "JTI_CLAIM": "jti",
+    "CHECK_REVOKE_TOKEN": True
+}
