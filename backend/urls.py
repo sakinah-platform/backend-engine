@@ -22,10 +22,19 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 from master_data.api_router import MasterDataRouter
 
 master_data_router = MasterDataRouter().result()
+
+jwt_token_patterns = [
+
+    path('token_refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('token_verify/', TokenVerifyView.as_view(), name='token_verify'),
+
+]
+
 urlpatterns = [
     path('', RedirectView.as_view(pattern_name='swagger-ui', permanent=False), name='index'),
     path('admin/', admin.site.urls),
@@ -35,7 +44,7 @@ urlpatterns = [
     path('rest/', include('rest_framework.urls'), name='rest_framework'),
     path('master_data/', include(master_data_router), name='master_data'),
     path('accounts/', include('rest_registration.api.urls')),
-
+    path('tokens/', include((jwt_token_patterns, 'jwt'), namespace='jwt'),)
 ]
 
 if not settings.PRODUCTION:
