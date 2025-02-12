@@ -193,12 +193,14 @@ CORS_ALLOW_CREDENTIALS = True
 
 if PRODUCTION:
     CORS_ORIGIN_WHITELIST = [
-        'https://sakinah.co.id',
+        'https://idsakinah.com',
+        'https://sakinah.hafiyyansayy.id',
         'http://localhost:6000'
     ]
 
     CSRF_TRUSTED_ORIGINS = [
-        'https://sakinah.co.id',
+        'https://idsakinah.com',
+        'https://sakinah.hafiyyansayy.id',
         'http://localhost:6000'
     ]
 
