@@ -1,0 +1,55 @@
+from typing import Dict
+
+SERVICE_UNAVAILABLE_MESSAGE = 'Service temporarily unavailable, try again later.'
+SERVICE_UNAVAILABLE_STRCODE = 'service_unavailable'
+SYSTEM_UNKNOWN_ERR_MESSAGE = 'Some errors happen in the server. Please contact the system administrator.'
+SYSTEM_UNKNOWN_ERR_STRCODE = 'unknown_error'
+
+
+SYSTEM_CONSTANT: Dict = {SERVICE_UNAVAILABLE_STRCODE: SERVICE_UNAVAILABLE_MESSAGE,
+                         SYSTEM_UNKNOWN_ERR_STRCODE: SYSTEM_UNKNOWN_ERR_MESSAGE
+
+                         }
+MONDAY_ENUM = 'MO'
+TUESDAY_ENUM = 'TU'
+WEDNESDAY_ENUM = 'WE'
+THURSDAY_ENUM = 'TH'
+FRIDAY_ENUM = 'FR'
+SATURDAY_ENUM = 'SA'
+SUNDAY_ENUM = 'SU'
+
+MONDAY = 'Monday'
+TUESDAY = 'Tuesday'
+WEDNESDAY = 'Wednesday'
+THURSDAY = 'Thursday'
+FRIDAY = 'Friday'
+SATURDAY = 'Saturday'
+SUNDAY = 'Sunday'
+
+SENIN = 'Senin'
+SELASA = 'Selasa'
+RABU = 'Rabu'
+KAMIS = 'Kamis'
+JUMAT = 'Jumat'
+SABTU = 'Sabtu'
+MINGGU = 'Minggu'
+
+DAYS = [
+  (MONDAY_ENUM, SENIN),
+  (TUESDAY_ENUM, SELASA),
+  (WEDNESDAY_ENUM, RABU),
+  (THURSDAY_ENUM, KAMIS),
+  (FRIDAY_ENUM, JUMAT),
+  (SATURDAY_ENUM, SABTU),
+  (SUNDAY_ENUM, MINGGU),
+]
+
+ENGLISH_DAYS = [
+  (MONDAY_ENUM, MONDAY),
+  (TUESDAY_ENUM, TUESDAY),
+  (WEDNESDAY_ENUM, WEDNESDAY),
+  (THURSDAY_ENUM, THURSDAY),
+  (FRIDAY_ENUM, FRIDAY),
+  (SATURDAY_ENUM, SABTU),
+  (SUNDAY_ENUM, MINGGU),
+]
