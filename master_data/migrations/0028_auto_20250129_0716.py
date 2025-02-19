@@ -9,7 +9,7 @@ def copy_vendor_uuid(apps, schema_editor):
     VendorGallery = apps.get_model('master_data', 'VendorGallery')
     VendorSchedule = apps.get_model('master_data', 'VendorSchedule')
     Vendor = apps.get_model('master_data', 'Vendor')
-    vendor_uuid = Vendor.objects.filter(id=models.OuterRef('vendor_old')) \
+    vendor_uuid = Vendor.objects.filter(id=models.OuterRef('vendor_old_id')) \
         .values_list('uuid')[:1]
     VendorPackage.objects.update(vendor=models.Subquery(vendor_uuid))
     VendorGallery.objects.update(vendor=models.Subquery(vendor_uuid))
@@ -19,7 +19,7 @@ def copy_vendor_uuid(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('master_data', '0031_rename_vendor_vendorgallery_vendor_old_and_more'),
+        ('master_data', '0027_rename_vendor_vendorgallery_vendor_old_and_more'),
     ]
 
     operations = [
@@ -56,5 +56,20 @@ class Migration(migrations.Migration):
         migrations.RunPython(
             copy_vendor_uuid,
             reverse_code=migrations.RunPython.noop
+        ),
+        migrations.AlterField(
+            model_name='vendorgallery',
+            name='vendor',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='galleries', to='master_data.vendor'),
+        ),
+        migrations.AlterField(
+            model_name='vendorpackage',
+            name='vendor',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='packages', to='master_data.vendor'),
+        ),
+        migrations.AlterField(
+            model_name='vendorschedule',
+            name='vendor',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='schedules', to='master_data.vendor'),
         ),
     ]

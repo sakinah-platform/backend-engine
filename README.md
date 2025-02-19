@@ -82,6 +82,9 @@ Once development is done in your local machine, you can shut down your database 
 docker-compose down
 ```
 
+#### Change UUID back to Integer ID (Rollback) To-Do:
+- [ ] Backfill `id` that are `null` with integer prior to rollback.
+
 ### Run Server
 
 Finally, to run Backend Engine, run the following command.

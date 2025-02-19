@@ -19,6 +19,7 @@ class VendorSchedule(SoftDeleteModel):
                                related_name='schedules',
                                on_delete=models.PROTECT,
                                blank=False)
+    vendor_old_id = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

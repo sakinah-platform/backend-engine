@@ -4,6 +4,13 @@ import uuid
 from django.db import migrations, models
 
 
+def gen_uuid(apps, schema_editor):
+    MyModel = apps.get_model("master_data", "Vendor")
+    for row in MyModel.objects.all():
+        row.uuid = uuid.uuid4()
+        row.save(update_fields=["uuid"])
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -14,6 +21,12 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='vendor',
             name='uuid',
-            field=models.UUIDField(default=uuid.uuid4, unique=True),
+            field=models.UUIDField(default=uuid.uuid4, editable=False, null=True),
+        ),
+        migrations.RunPython(gen_uuid, reverse_code=migrations.RunPython.noop),
+        migrations.AlterField(
+            model_name='vendor',
+            name='uuid',
+            field=models.UUIDField(default=uuid.uuid4, editable=False, unique=True),
         ),
     ]

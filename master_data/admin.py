@@ -27,7 +27,7 @@ class CityAdmin(admin.ModelAdmin):
 @admin.register(Vendor)
 class VendorAdmin(admin.ModelAdmin):
 
-    list_display = ('id',
+    list_display = ('uuid',
                     'name',
                     'description',
                     'about',
@@ -42,7 +42,7 @@ class VendorAdmin(admin.ModelAdmin):
                     'visibility',
                     'created_at',
                     'updated_at')
-    search_fields = ['id',
+    search_fields = ['uuid',
                      'name',
                      'category',
                      'availability',
