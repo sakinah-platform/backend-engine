@@ -84,14 +84,16 @@ class TestVendorListSerializer(TestCase):
     def test_vendor_list_serializer_result(self):
         vendors = Vendor.objects.annotate(starting_price=Min('packages__price'))
         vendors_list_serializer = VendorListSerializer(vendors, many=True)
-        expected_data_result = [{'id': str(vendors.first().id),
+        expected_data_result = [{'uuid': str(vendors.first().uuid),
+                                 'id': vendors.first().id,
                                  'name': vendors.first().name,
                                  'profile_image': vendors.first().profile_image.url,
                                  'starting_price': 1,
                                  'city': vendors.first().city.name,
                                  'category': vendors.first().category.name,
                                  },
-                                {'id': str(vendors.last().id),
+                                {'uuid': str(vendors.last().uuid),
+                                 'id': vendors.last().id,
                                  'name': vendors.last().name,
                                  'profile_image': vendors.last().profile_image.url,
                                  'starting_price': 1,
@@ -111,7 +113,8 @@ class TestVendorSerializer(TestCase):
         vendor_gallery_serializer = VendorGallerySerializer(vendor.galleries, many=True)
         vendor_package_serializer = VendorPackageSerializer(vendor.packages, many=True)
         vendor_schedule_serializer = VendorScheduleSerializer(vendor.schedules, many=True)
-        expected_data_result = {'id': str(vendor.id),
+        expected_data_result = {'uuid': str(vendor.uuid),
+                                'id': vendor.id,
                                 'name': vendor.name,
                                 'description': vendor.description,
                                 'about': vendor.about,
@@ -165,13 +168,15 @@ class TestVendorPackageListSerializer(TestCase):
         first_package_gallery_serializer = PackageGallerySerializer(vendor_packages.first().galleries.first())
         last_package_gallery_serializer = PackageGallerySerializer(vendor_packages.last().galleries.first())
         vendor_packages_list_serializer = VendorPackageListSerializer(vendor_packages, many=True)
-        expected_data_result = [{'id': str(vendor_packages.first().id),
+        expected_data_result = [{'uuid': str(vendor_packages.first().uuid),
+                                 'id': vendor_packages.first().id,
                                  'name': vendor_packages.first().name,
                                  'first_image': first_package_gallery_serializer.data,
                                  'price': vendor_packages.first().price,
                                  'description': vendor_packages.first().description
                                  },
-                                {'id': str(vendor_packages.last().id),
+                                {'uuid': str(vendor_packages.last().uuid),
+                                 'id': vendor_packages.last().id,
                                  'name': vendor_packages.last().name,
                                  'first_image': last_package_gallery_serializer.data,
                                  'price': vendor_packages.last().price,
@@ -188,7 +193,8 @@ class TestVendorPackageSerializer(TestCase):
         package = VendorPackage.objects.get(name='test_package')
         package_serializer = VendorPackageSerializer(package)
         package_gallery_serializer = PackageGallerySerializer(package.galleries, many=True)
-        expected_data_result = {'id': str(package.id),
+        expected_data_result = {'uuid': str(package.uuid),
+                                'id': package.id,
                                 'name': package.name,
                                 'description': package.description,
                                 'price': package.price,
