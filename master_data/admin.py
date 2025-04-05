@@ -52,25 +52,25 @@ class VendorAdmin(admin.ModelAdmin):
 @admin.register(VendorGallery)
 class VendorGalleryAdmin(admin.ModelAdmin):
 
-    list_display = ('id',
+    list_display = ('uuid',
                     'image',
                     'vendor',
                     'created_at',
                     'updated_at')
-    search_fields = ['id',
+    search_fields = ['uuid',
                      'vendor']
 
 
 @admin.register(VendorPackage)
 class VendorPackageAdmin(admin.ModelAdmin):
 
-    list_display = ('id',
+    list_display = ('uuid',
                     'name',
                     'description',
                     'vendor',
                     'created_at',
                     'updated_at')
-    search_fields = ['id',
+    search_fields = ['uuid',
                      'name',
                      'vendor']
 
@@ -78,12 +78,12 @@ class VendorPackageAdmin(admin.ModelAdmin):
 @admin.register(PackageGallery)
 class PackageGalleryAdmin(admin.ModelAdmin):
 
-    list_display = ('id',
+    list_display = ('uuid',
                     'image',
                     'package',
                     'created_at',
                     'updated_at')
-    search_fields = ['id',
+    search_fields = ['uuid',
                      'package']
 
 

@@ -6,5 +6,5 @@ class VendorGallerySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = VendorGallery
-        fields = ['id', 'image']
-        read_only_fields = ['id', 'image']
+        fields = ['uuid', 'id', 'image']
+        read_only_fields = ['uuid', 'id', 'image']

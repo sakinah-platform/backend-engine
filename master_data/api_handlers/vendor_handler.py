@@ -31,8 +31,8 @@ class VendorViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericVie
     pagination_class = FiftyResultsPagination
     filter_backends = [filters.DjangoFilterBackend, CustomSearchFilter]
     filterset_class = VendorFilter
-    ordering_fields = ('id', 'name', 'created_at')
-    ordering = ('-id',)
+    ordering_fields = ('name', 'created_at')
+    ordering = ('-name',)
     search_fields = ['name']
     serializer_class = VendorSerializer
 
