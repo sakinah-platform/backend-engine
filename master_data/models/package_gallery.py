@@ -22,7 +22,9 @@ class PackageGallery(SoftDeleteModel):
     package = models.ForeignKey(VendorPackage,
                                 related_name='galleries',
                                 on_delete=models.PROTECT,
-                                blank=False)
+                                blank=False,
+                                null=True)
+    package_old_id = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

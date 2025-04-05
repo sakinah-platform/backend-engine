@@ -17,7 +17,8 @@ def vendor_galleries(_, curr_file):
 
 class VendorGallery(SoftDeleteModel):
 
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    uuid = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False, unique=True)
+    id = models.IntegerField(null=True, blank=True)
     image = models.ImageField(upload_to=vendor_galleries,
                               validators=[FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)],
                               null=False,

@@ -10,7 +10,8 @@ from master_data.models.vendor import Vendor
 
 class VendorSchedule(SoftDeleteModel):
 
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    uuid = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False, unique=True)
+    id = models.IntegerField(null=True, blank=True)
     start_time = models.TimeField(blank=False,
                                   null=False)
     end_time = models.TimeField(blank=False,

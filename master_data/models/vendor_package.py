@@ -7,7 +7,8 @@ from master_data.models.vendor import Vendor
 
 class VendorPackage(SoftDeleteModel):
 
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    uuid = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False, unique=True)
+    id = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=100,
                             unique=True,
                             blank=False,
