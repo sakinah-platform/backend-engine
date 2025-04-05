@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.core.exceptions import ValidationError
 from django_softdelete.models import SoftDeleteModel
@@ -8,6 +10,7 @@ from master_data.models.vendor import Vendor
 
 class VendorSchedule(SoftDeleteModel):
 
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     start_time = models.TimeField(blank=False,
                                   null=False)
     end_time = models.TimeField(blank=False,
