@@ -6,5 +6,5 @@ class PackageGallerySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PackageGallery
-        fields = ['id', 'image']
-        read_only_fields = ['id', 'image']
+        fields = ['uuid', 'id', 'image']
+        read_only_fields = ['uuid', 'id', 'image']

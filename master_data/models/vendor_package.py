@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django_softdelete.models import SoftDeleteModel
 
@@ -6,6 +7,8 @@ from master_data.models.vendor import Vendor
 
 class VendorPackage(SoftDeleteModel):
 
+    uuid = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False, unique=True)
+    id = models.IntegerField(null=True, blank=True)
     name = models.CharField(max_length=100,
                             unique=True,
                             blank=False,
@@ -14,6 +17,7 @@ class VendorPackage(SoftDeleteModel):
                                related_name='packages',
                                on_delete=models.PROTECT,
                                blank=False)
+    vendor_old_id = models.IntegerField(null=True, blank=True)
     price = models.PositiveIntegerField(blank=False, null=False)
     description = models.TextField(blank=False, null=False)
     short_descriptions = models.JSONField(blank=True, null=True)

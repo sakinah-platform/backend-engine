@@ -82,6 +82,9 @@ Once development is done in your local machine, you can shut down your database 
 docker-compose down
 ```
 
+#### Change UUID back to Integer ID (Rollback) To-Do:
+- [ ] Backfill `id` that are `null` with integer prior to rollback.
+
 ### Run Server
 
 Finally, to run Backend Engine, run the following command.
@@ -92,10 +95,15 @@ Backend Engine should be running in your machine and can be accessed at your `lo
 
 ## Test, Code Coverage, and Linter
 
-To run tests, run the following command
+To run tests, run the following command*
 ```shell
 python manage.py test 
 ```
+
+#### Test Note:
+-  One of migrations, `0018`, has to be commmented in order to run the test sucessfully `(TO-DO: needs to be fixed)`.
+- This happen since we change the `VendorSchedule` primary key from `id` and `uuid` after renaming the `DAYS` enumeration, causing the backfill migration to fail as it cannot find `vendor_schedule.uuid` and `vendor_schedule.vendor_old_id` 
+
 
 To check code coverage, run
 ```shell

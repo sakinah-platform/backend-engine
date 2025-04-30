@@ -33,5 +33,6 @@ class Migration(migrations.Migration):
         VendorSchedule.objects.bulk_update(modified_schedule, ['day'])
 
     operations = [
+        # Comment this migration operations before running test
         migrations.RunPython(migrate_schedule_days, migrations.RunPython.noop),
     ]

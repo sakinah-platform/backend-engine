@@ -22,7 +22,7 @@ class VendorPackageFilter(filters.FilterSet):
 
     class Meta:
         model = VendorPackage
-        fields = ['description']
+        fields = ['short_descriptions']
         filter_overrides = {
             models.JSONField: {
                 'filter_class': filters.CharFilter,
@@ -40,14 +40,14 @@ class VendorPackageViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, Gen
     pagination_class = FiftyResultsPagination
     filter_backends = [filters.DjangoFilterBackend, CustomSearchFilter]
     filterset_class = VendorPackageFilter
-    ordering_fields = ('id', 'name', 'created_at')
-    ordering = ('-id',)
+    ordering_fields = ('name', 'created_at')
+    ordering = ('-name',)
     search_fields = ['name']
 
     def get_queryset(self, *args, **kwargs):
         vendor_id = self.kwargs.get("vendor_pk")
         try:
-            vendor = Vendor.objects.get(id=vendor_id)
+            vendor = Vendor.objects.get(uuid=vendor_id)
         except Vendor.DoesNotExist:
             raise NotFound('A vendor with this id does not exist.')
 

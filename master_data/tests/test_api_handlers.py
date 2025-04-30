@@ -43,7 +43,8 @@ def set_up_all_vendor_resources():
     package = VendorPackage.objects.create(name='test_package_2_1',
                                            price=10,
                                            vendor=vendor,
-                                           description={'min_package': 100})
+                                           description={'min_package': 100},
+                                           short_descriptions={'min_package': 100})
     PackageGallery.objects.create(image=uploaded,
                                   package=package)
 
@@ -53,7 +54,7 @@ class TestVendorHandler(APITestCase):
 
     def setUp(self):
         set_up_all_vendor_resources()
-        self.vendor_id = Vendor.objects.get(name='test_vendor').id
+        self.vendor_id = Vendor.objects.get(name='test_vendor').uuid
 
     def test_get_vendor_is_found(self):
         url = f'/master_data/vendors/{self.vendor_id}/'
@@ -71,7 +72,8 @@ class TestVendorHandler(APITestCase):
         self.assertEqual(response.data['email'], expected_vendor_email)
 
     def test_get_vendor_is_not_found(self):
-        url = '/master_data/vendors/999/'
+        unknown_vendor_uuid = 'cef7d45b-96c0-4af1-b0f8-da4a56e0f3e8'
+        url = f'/master_data/vendors/{unknown_vendor_uuid}/'
         response = self.client.get(url, format='json')
 
         expected_error = [{'attr': None, 'code': 'not_found', 'detail': 'Not found.'}]
@@ -86,7 +88,8 @@ class TestVendorHandler(APITestCase):
 
         expected_vendor_list = [
             {
-                'id': vendor.id,
+                'uuid': str(vendor.uuid),
+                'id': None,
                 'name': vendor.name,
                 'profile_image': 'http://testserver' + vendor.profile_image.url,
                 'starting_price': 10,
@@ -105,7 +108,8 @@ class TestVendorHandler(APITestCase):
 
         expected_vendor_list = [
             {
-                'id': vendor.id,
+                'uuid': str(vendor.uuid),
+                'id': None,
                 'name': vendor.name,
                 'profile_image': 'http://testserver' + vendor.profile_image.url,
                 'starting_price': 10,
@@ -133,7 +137,8 @@ class TestVendorHandler(APITestCase):
 
         expected_vendor_list = [
             {
-                'id': vendor.id,
+                'uuid': str(vendor.uuid),
+                'id': None,
                 'name': vendor.name,
                 'profile_image': 'http://testserver' + vendor.profile_image.url,
                 'starting_price': 10,
@@ -171,7 +176,8 @@ class TestVendorHandler(APITestCase):
 
         expected_vendor_list = [
             {
-                'id': vendor.id,
+                'uuid': str(vendor.uuid),
+                'id': None,
                 'name': vendor.name,
                 'profile_image': 'http://testserver' + vendor.profile_image.url,
                 'starting_price': 10,
@@ -209,7 +215,8 @@ class TestVendorHandler(APITestCase):
 
         expected_vendor_list = [
             {
-                'id': vendor.id,
+                'uuid': str(vendor.uuid),
+                'id': None,
                 'name': vendor.name,
                 'profile_image': 'http://testserver' + vendor.profile_image.url,
                 'starting_price': 10,
@@ -238,15 +245,15 @@ class TestVendorPackageHandler(APITestCase):
 
     def setUp(self):
         set_up_all_vendor_resources()
-        self.vendor_id = Vendor.objects.get(name='test_vendor').id
-        self.package_id = VendorPackage.objects.get(vendor=self.vendor_id).id
+        self.vendor_id = Vendor.objects.get(name='test_vendor').uuid
+        self.package_id = VendorPackage.objects.get(vendor=self.vendor_id).uuid
 
     def test_get_vendor_package_is_found(self):
-        url = f'/master_data/vendors/{self.vendor_id}/packages/{self.package_id}/'
+        url = f'/master_data/vendors/{str(self.vendor_id)}/packages/{self.package_id}/'
         response = self.client.get(url, format='json')
 
         expected_vendor_package_name = 'test_package_2_1'
-        expected_vendor_package_description = {'min_package': 100}
+        expected_vendor_package_description = "{'min_package': 100}"
         expected_vendor_package_price = 10
         expected_vendor_package_terms_and_condition = ''
 
@@ -257,7 +264,8 @@ class TestVendorPackageHandler(APITestCase):
         self.assertEqual(response.data['terms_and_condition'], expected_vendor_package_terms_and_condition)
 
     def test_get_vendor_package_is_not_found(self):
-        url = f'/master_data/vendors/{self.vendor_id}/packages/999/'
+        unknown_package_uuid='cef7d45b-96c0-4af1-b0f8-da4a56e0f3e8'
+        url = f'/master_data/vendors/{str(self.vendor_id)}/packages/{unknown_package_uuid}/'
         response = self.client.get(url, format='json')
 
         expected_error = [{'attr': None, 'code': 'not_found', 'detail': 'Not found.'}]
@@ -266,7 +274,8 @@ class TestVendorPackageHandler(APITestCase):
         self.assertEqual(response.data['errors'], expected_error)
 
     def test_get_vendor_is_not_found(self):
-        url = f'/master_data/vendors/999/packages/{self.package_id}/'
+        unknown_vendor_uuid = 'cef7d45b-96c0-4af1-b0f8-da4a56e0f3e8'
+        url = f'/master_data/vendors/{unknown_vendor_uuid}/packages/{self.package_id}/'
         response = self.client.get(url, format='json')
 
         expected_error = [{'attr': None, 'code': 'not_found', 'detail': 'A vendor with this id does not exist.'}]
@@ -275,15 +284,17 @@ class TestVendorPackageHandler(APITestCase):
         self.assertEqual(response.data['errors'], expected_error)
 
     def test_get_vendor_package_list(self):
-        url = f'/master_data/vendors/{self.vendor_id}/packages/'
+        url = f'/master_data/vendors/{str(self.vendor_id)}/packages/'
         response = self.client.get(url, format='json')
         packages = VendorPackage.objects.filter(vendor_id=self.vendor_id)
 
         expected_vendor_package_list = [
             {
-                'id': packages.first().id,
+                'uuid': str(packages.first().uuid),
+                'id': None,
                 'name': packages.first().name,
                 'first_image': {
+                    'uuid': str(packages.first().galleries.first().uuid),
                     'id': packages.first().galleries.first().id,
                     'image': 'http://testserver' + packages.first().galleries.first().image.url
                 },
@@ -296,15 +307,17 @@ class TestVendorPackageHandler(APITestCase):
         self.assertEqual(response.data['results'], expected_vendor_package_list)
 
     def test_get_vendor_package_list_short_desc_found(self):
-        url = f'/master_data/vendors/{self.vendor_id}/packages/?description=100'
+        url = f'/master_data/vendors/{str(self.vendor_id)}/packages/?short_descriptions=100'
         response = self.client.get(url, format='json')
         packages = VendorPackage.objects.filter(vendor_id=self.vendor_id)
 
         expected_vendor_package_list = [
             {
-                'id': packages.first().id,
+                'uuid': str(packages.first().uuid),
+                'id': None,
                 'name': packages.first().name,
                 'first_image': {
+                    'uuid': str(packages.first().galleries.first().uuid),
                     'id': packages.first().galleries.first().id,
                     'image': 'http://testserver' + packages.first().galleries.first().image.url
                 },
@@ -317,7 +330,7 @@ class TestVendorPackageHandler(APITestCase):
         self.assertEqual(response.data['results'], expected_vendor_package_list)
 
     def test_get_vendor_package_list_short_desc_not_found(self):
-        url = f'/master_data/vendors/{self.vendor_id}/packages/?description=1000'
+        url = f'/master_data/vendors/{str(self.vendor_id)}/packages/?short_descriptions=1000'
         response = self.client.get(url, format='json')
 
         expected_vendor_package_list = []

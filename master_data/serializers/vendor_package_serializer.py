@@ -9,8 +9,8 @@ class VendorPackageListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = VendorPackage
-        fields = ['id', 'name', 'price', 'description', 'first_image']
-        read_only_fields = ['id', 'name', 'price', 'description']
+        fields = ['uuid', 'id', 'name', 'price', 'description', 'first_image']
+        read_only_fields = ['uuid', 'id', 'name', 'price', 'description']
 
 
 class VendorPackageSerializer(VendorPackageListSerializer):
@@ -20,5 +20,5 @@ class VendorPackageSerializer(VendorPackageListSerializer):
 
     class Meta:
         model = VendorPackage
-        fields = ['id', 'name', 'price', 'terms_and_condition', 'description', 'galleries']
-        read_only_fields = ['id', 'name', 'price', 'terms_and_condition', 'description', 'galleries']
+        fields = ['uuid', 'id', 'name', 'price', 'terms_and_condition', 'description', 'galleries']
+        read_only_fields = ['uuid', 'id', 'name', 'price', 'terms_and_condition', 'description', 'galleries']

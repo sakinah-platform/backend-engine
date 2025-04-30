@@ -1,3 +1,5 @@
+import uuid
+
 from django.db import models
 from django.core.validators import FileExtensionValidator
 from django_softdelete.models import SoftDeleteModel
@@ -15,6 +17,8 @@ def vendor_galleries(_, curr_file):
 
 class VendorGallery(SoftDeleteModel):
 
+    uuid = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False, unique=True)
+    id = models.IntegerField(null=True, blank=True)
     image = models.ImageField(upload_to=vendor_galleries,
                               validators=[FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)],
                               null=False,
@@ -23,6 +27,7 @@ class VendorGallery(SoftDeleteModel):
                                related_name='galleries',
                                on_delete=models.PROTECT,
                                blank=False)
+    vendor_old_id = models.IntegerField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
